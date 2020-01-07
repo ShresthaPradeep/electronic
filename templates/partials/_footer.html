@@ -1,0 +1,166 @@
+<footer>
+    <div class="wrap-function-info">
+        <div class="container">
+            <ul>
+                <li class="info-item">
+                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">Free shipping</h4>
+                        <p class="fc-desc"> Free on order over $99</p>
+                    </div>
+                </li>
+                <li class="info-item">
+                    <i class="fa fa-recycle" aria-hidden="true"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">Guarantee</h4>
+                        <p class="fc-desc"> 30 days money back</p>
+                    </div>
+                </li>
+                <li class="info-item">
+                    <i class="fa fa-credit-card"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">Safe Payment</h4>
+                        <p class="fc-desc"> safe your online payment</p>
+                    </div>
+                </li>
+                <li class="info-item">
+                    <i class="fa fa-life-ring" aria-hidden="true"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">Online Support</h4>
+                        <p class="fc-desc">We Have Support 24/7</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="newslettersub">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="newsletter_ttl_para">
+                        <h4><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Subscribe For Newsletter</h4>
+                        <p>...be upto date with our <strong>Offers</strong> and <strong>Discounts</strong></p>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="newsltter_from">
+                        <form>
+                            <div class="input-groups ">
+                                <input type="text" class="form-control" name="name" placeholder="Email Address...">
+                                <button type="submit" class="nwl_btn">Sign Up</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footerinfos">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="foot_general">
+                        {% if contacts %}
+                            {% for contact in contacts %}
+                                <div class="footlogo">
+                                    <a href="{% url 'index' %}">
+                                        <img src="{{ contact.company_logo.url }}" alt="">
+                                    </a>
+                                </div>
+                                <div class="cont_info">
+                                    <div class="continf_top">
+                                        <div class="cont_icn">
+                                            <i class="fa fa-headphones" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="cont_num_txt">
+                                            <span class="fotphone_ttl">Got Questions ? Call us 24/7!</span>
+                                            <span class="fotphonenum">+{{ contact.country_code }} {{ contact.phone }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="continfo">
+                                        <h5>Be In Touch With Us</h5>
+                                        <p>{{ contact.location }}</p>
+                                    </div>
+                                    <div class="fot_socials">
+                                        <ul>
+                                            <li>
+                                                <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="foter_menus">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="footmenus lrg">
+                                    <h5>Find It Fast</h5>
+                                    <div class="menusitms">
+                                        {% if categories %}
+                                            <ul>
+                                                {% for category in categories %}
+                                                <li>
+                                                    <a href="{% url 'category_list' category.id %}">{{ category.name }}</a>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="footmenus">
+                                    <h5>Customer Care</h5>
+                                    <div class="menusitms">
+                                        <ul>
+                                            <li>
+                                                <a href="#">My Account</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Track your Order</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Wishlist</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Customer Service</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Returns/Exchange</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">FAQs</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Product Support</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright_bx">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>© <strong>Electronic</strong> - All Rights Reserved</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <div class="contentspacer"></div> 
+    <section class="product_listing">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">                    
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="prd_list_heading">
+                                <h1>Product Listings</h1>
+                                <spna class="showing_itms">showing 1–15 of 20 results</spna>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        {% for brand in brands %}
+                            {% for product in brand.brand_products.all %}
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <div class="list_prd_itm text-center">
+                                        <div class="prd_img">
+                                            <a href="{% url 'product_detail' product.id %}"><img src="{{ product.photo_main.url }}" alt=""></a>
+                                        </div>
+                                        <div class="prd_infos">
+                                            <h3> <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+                                            <div class="prd_infos_prcs">
+                                                <span class="price_old">Rs.{{ product.marked_price }}</span><span class="price_new">Rs.{{ product.selling_price }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="prd_actions">
+                                            <button class="addtocart">Add To Cart</button>
+                                            <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="row">
+                        <div class="prd_pagination">
+                            <div class="blog-pagination">
+                                <span>Showing 1–15 of 20 results</span>
+                                <ul class="flat-pagination style1">
+                                    <li class="prev">
+                                        <a href="#" title="">
+                                            Prev Page
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="waves-effect" title="">01</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="waves-effect" title="">02</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#" class="waves-effect" title="">03</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="waves-effect" title="">04</a>
+                                    </li>
+                                    <li class="next">
+                                        <a href="#" title="">
+                                        Next Page
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- /.flat-pagination style1 -->
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.3.2/css/lightgallery.css" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.theme.default.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
+    <!-- <link rel="stylesheet" type="text/css" href="css/font-awesome.css"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Plugins css -->
+    <link rel="stylesheet" href="{% static 'css/plugins.css' %}">
+</head>
+
+<body>
+      
+    {% include 'partials/_mobile_menu.html' %}
+
+    <header class="main_header">
+        <div class="rsp_srch_bx_hldr">
+            <span class="rsp_srch_close">x</span>
+            <form action="">
+                <div class="input-groups ">
+                    <input type="text" class="form-control" name="name" placeholder="Search here">
+                    <div class="input-group-append">
+                        <button type="submit" class="submit "><i class="fa fa-search "></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>    
+        <div class="header-2">
+            <div class="container">
+                <div class="header_contnt">                
+                    <!-- responsive toggle main menu -->
+                    <div class="resp_tggl_main_menu">
+                        <span class="menu_bar"></span>
+                    </div>
+                    <!-- responsive toggle main menu -->
+                    <div class="header_logo">
+                        {% if contacts %}
+                            {% for contact in contacts %}
+                                <div class="logo">
+                                    <a href="{% url 'index' %}"><img src="{{ contact.company_logo.url }}"></a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="header_right">
+                        <div class="header_right_left">
+                            <div class="hd_rgt_lft_hldr">
+                                
+                                <div class="new-cn-inf">
+                                    <div class="cnt_infos">
+                                        {% if contacts %}
+                                            {% for contact in contacts %}
+                                                <span class="cnt_infs_lst">
+                                                    <i class="fa fa-phone "> </i> Hotline: +{{ contact.country_code }} {{ contact.phone }}
+                                                    </span>
+                                                <span class="cnt_infs_lst">
+                                                    <i class="fa fa-envelope"> </i>Email: {{ contact.email }}  
+                                                    </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="flt-lft-lr">
+                                        <a href="#">Login</a>
+                                        <a href="#">Register</a>
+                                    </div>
+                                </div>
+                                <div class="srchfrm_hdr">
+                                    <form action="{% url 'search' %}">
+                                        {% csrf_token %}
+                                        <div class="input-groups ">
+                                            <input type="text" class="form-control" name="keywords" placeholder="Search here">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="submit "><i class="fa fa-search "></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>                    
+                        <div class="header_right_prt">                        
+                                    <div class="cart_whis_noti">
+                                        <!-- RESPONSIVE SEARCH DIV -->
+                                        <div class="resp_srch">
+                                            <span class="clk_rsp_srch">
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <!-- RESPONSIVE SEARCH DIV -->
+                                        <div class="hd_wishlist shop_itm">                                    
+                                            <div class="clk_for_dropdwn fabclick"></div>
+                                            <span class="shop_itm_txt">
+                                                <a href="#">
+                                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                                <!-- <span class="shp_itm_indic">2</span> -->
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="hd_cart shop_itm">
+                                            <div class="clk_for_dropdwn cartclick"></div>
+                                            <span class="shop_itm_txt">
+                                                <a href="#">
+                                                <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                                                <!-- <span class="shp_itm_indic">2</span> -->
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="hd_waitclick shop_itm">
+                                            <div class="clk_for_dropdwn waitclick"></div>
+                                            <span class="shop_itm_txt">
+                                                <a href="#">
+                                                <i class="fa fa-hourglass-end" aria-hidden="true"></i>
+                                                <!-- <span class="shp_itm_indic">2</span>  -->
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="hd_noti shop_itm">
+                                            <div class="clk_for_dropdwn hd_notofi"></div>
+                                            <span class="shop_itm_txt">
+                                                <a href="#">
+                                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                                <!-- <span class="shp_itm_indic">2</span> -->
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="hd_prof shop_itm">
+                                            <span class="shop_itm_txt">
+                                                <a href="#">
+                                                    <img src="images/216.jpg" alt="">
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <!-- drop downs -->
+                                        <div class="dprdwn fav_drp">
+                                            <span class="drpdwn_cls">close</span>
+                                            <div class="drpdwn_header">
+                                                <span class="drpdwn_hdingtxt">
+                                                            Favourites
+                                                        </span>
+                                            </div>
+                                            <div class="drp_added_itms">
+                                                <ul>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus Viverra Urna</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="drp_more_items">
+                                                    <div class="drp_vew_mritemsbtn">
+                                                        <a href="#">View All Items</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="dprdwn cart_drp">
+                                            <span class="drpdwn_cls">close</span>
+                                            <div class="drpdwn_header">
+                                                <span class="drpdwn_hdingtxt">
+                                                            Cart
+                                                        </span>
+                                            </div>
+                                            <div class="drp_added_itms">
+                                                <ul>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus Viverra Urna</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="drp_more_items">
+                                                    <div class="drp_vew_mritemsbtn">
+                                                        <a href="#">View All Items</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="dprdwn wait_drp">
+                                            <span class="drpdwn_cls">close</span>
+                                            <div class="drpdwn_header">
+                                                <span class="drpdwn_hdingtxt">
+                                                            Wait List
+                                                        </span>
+                                            </div>
+                                            <div class="drp_added_itms">
+                                                <ul>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus Viverra Urna</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="added_itms_img">
+                                                                <a href="#">
+                                                                    <img src="images/ar01.jpg" alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div class="dlt_drp_added_itm">
+                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="drp_more_items">
+                                                    <div class="drp_vew_mritemsbtn">
+                                                        <a href="#">View All Items</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="dprdwn notifi_drp">
+                                            <span class="drpdwn_cls">close</span>
+                                            <div class="drpdwn_header">
+                                                <span class="drpdwn_hdingtxt">
+                                                            Notifications
+                                                        </span>
+                                            </div>
+                                            <div class="drp_added_itms">
+                                                <ul>
+                                                    <li>
+                                                        <div class="drp_added_itms_lst">
+                                                            <div class="drp_added_itms_cont_hldr">
+                                                                <div class="drp_added_itms_cont">
+                                                                    <span class="drp_added_itms_txt">
+                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
+                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
+                                                                    </span>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="drp_more_items">
+                                                    <div class="drp_vew_mritemsbtn">
+                                                        <a href="#">View All</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- drop downs -->
+                                    </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <section class="headerbottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="nav_holder">
+                        <div class="toggle_nav">
+                            <div class="sh_hd_megamenu"></div>
+                            <span class="tggl_bx">
+                                        <span class="cat_mnu_txt">Categories</span>
+                            <span class="bars"></span>
+                            </span>
+                            <div class="toggle_openmenu_nav">
+                                <ul class="megamenu_lk">
+                                    <li>
+                                        <a href="#">
+                                            <span class="menu_icn">
+                                                        <img src="images/7.png" alt="">
+                                                    </span> Health & Fintness
+                                        </a>
+                                        <div class="submenu">
+                                            <ul>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="menu_icn">
+                                                                <img src="images/7.png" alt="">
+                                                            </span> One Submenu
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="menu_icn">
+                                                                <img src="images/7.png" alt="">
+                                                            </span> One Submenu
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="menu_icn">
+                                                                <img src="images/7.png" alt="">
+                                                            </span> One Submenu
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="menu_icn">
+                                                                <img src="images/7.png" alt="">
+                                                            </span> One Submenu
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="main_nav">
+                            {% if categories %}
+                                <ul class="menu-item-wrapper">
+                                    {% for category in categories %}
+                                        <li class="menu-item">
+                                            <a href="{% url 'category_list' category.id %}" class="">{{ category.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    {% include 'partials/_footer.html' %}
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://kenwheeler.github.io/slick/slick/slick.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.3.2/js/lightgallery.js"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

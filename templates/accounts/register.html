@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+</head>
+<div>
+    {% block content %}
+        <div class="contentspacer"></div> 	
+            <section class="pagecontent">
+                <div class="container">
+                    <div class="row">
+                        <div class="entryforms signup">
+                            <h1>Create your account. It’s free and only takes a minute.</h1>
+
+                            <div class="formContainer p-4">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" name="username" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email address</label>
+                                        <input type="email" name="email" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <a class="float-right" href="#">Forgot Passowd?</a>
+                                        <input type="password" name="password" class="form-control">
+                                        <div class="form_instructions">
+                                            <p>Passwords must contain at least eight characters, including at least 1 letter and 1 number.</p>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="sbt_btn">Signup</button>
+                                </form c>
+                                <div class="sigup_agree">
+                                    By clicking “Sign up”, you agree to our <a href="#">terms of service</a>, <a href="#">privacy policy</a>.
+                                </div>
+                            </div>
+                            <div class="ask_users">
+                                Already have an account? <a class="float-right" href="#">Login Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endblock %}
+</body>
+</html>

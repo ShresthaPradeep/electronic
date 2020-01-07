@@ -1,0 +1,15 @@
+{% if banners %}  
+    <section class="slider_and_newariv opt2_sldr">
+        <div class="mainslider_holder">
+            <div class="mainslider2_caro owl-carousel owl-theme">
+                {% for banner in banners %}
+                    {% for photo in banner.banner_photos.all %}
+                        <div class="item">
+                            <img src="{{ photo.photo.url }}" alt="">
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endif %}

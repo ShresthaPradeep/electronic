@@ -1,0 +1,148 @@
+<!-- mobile menu -->
+{% load static %}
+
+<div class="mb_slide_menu_back"></div>
+<div class="mb_slide_meu">
+    <div class="mb_slide_menu_cntnts">
+        <div class="mb_sld_top">
+            <div class="logo_sld_mnu">
+                <a href="#">
+                    <img src="{% static 'images/newlogo.png' %}">
+                </a>
+            </div>
+            <div class="mb_sld_hide">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="mb_accor_menu">
+            <ul class="accor_toplvl">
+                <li>
+                    <div class="clk_show_dh_catlist">
+                    <span class="menu_cat_name">
+                        <span class="menu_icn">
+                        <img src="images/7.png" alt="">
+                        </span> Laptops & Computers
+                    </span>
+                    <span class="sh_hd_accor_cont">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </span>
+                    </div>
+                    <div class="pg_links_cat">
+                        <ul class="accor_lowlvl">
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="clk_show_dh_catlist">
+                    <span class="menu_cat_name">
+                        <span class="menu_icn">
+                        <img src="images/7.png" alt="">
+                        </span> Laptops & Computers
+                    </span>
+                    <span class="sh_hd_accor_cont">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </span>
+                    </div>
+                    <div class="pg_links_cat">
+                        <ul class="accor_lowlvl">
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="clk_show_dh_catlist">
+                    <span class="menu_cat_name">
+                        <span class="menu_icn">
+                        <img src="images/7.png" alt="">
+                        </span> Laptops & Computers
+                    </span>
+                    <span class="sh_hd_accor_cont">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </span>
+                    </div>
+                    <div class="pg_links_cat">
+                        <ul class="accor_lowlvl">
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="clk_show_dh_catlist">
+                    <span class="menu_cat_name">
+                        <span class="menu_icn">
+                        <img src="images/7.png" alt="">
+                        </span> Laptops & Computers
+                    </span>
+                    <span class="sh_hd_accor_cont">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </span>
+                    </div>
+                    <div class="pg_links_cat">
+                        <ul class="accor_lowlvl">
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                            <li>
+                                <a href="#">Laptops & Computers</a>
+                            </li>
+                            <li>
+                                <a href="#">Gadgets</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="mb_btm_menus">
+            {% if categories %}
+                <ul>
+                    {% for category in categories %}
+                        <li>
+                            <a href="{% url 'category_list' category.id %}">{{ category.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<!-- mobile menu -->

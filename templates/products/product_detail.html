@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+</head>
+<body>
+    {% block content %}
+        <div class="contentspacer"></div> 	
+        <section class="product_details_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="product_dt_content">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="pdetails-images">
+                                        <div class="pdetails-largeimages pdetails-imagezoom">
+                                            <div class="pdetails-singleimage" data-src="{{ product_detail.photo_main.url }}">
+                                                <img src="{{ product_detail.photo_main.url }}" alt="_ image">
+                                                <div class="pd_zoom_icn">
+                                                    <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            {% for sub_image in product_detail.product_image.all %}
+                                                <div class="pdetails-singleimage" data-src="{{ sub_image.sub_image.url }}">
+                                                    <img src="{{ sub_image.sub_image.url }}" alt="product image">
+                                                    <div class="pd_zoom_icn">
+                                                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+    
+                                        <div class="pdetails-thumbs">
+                                            <div class="pdetails-singlethumb">
+                                                <img src="{{ product_detail.thumbnail_main.url }}" alt="product thumb">
+                                            </div>
+                                            {% for sub_image in product_detail.product_image.all %}
+                                                <div class="pdetails-singlethumb">
+                                                <img src="{{ sub_image.sub_thumbnail.url }}" alt="product thumb">
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div><!-- col 6 -->
+                                <div class="col-lg-6">
+                                    <div class="pdetails_details">
+                                        <span class="pdetails_bg"></span>
+                                        <div class="pdtetails_cnt_holder">
+                                            <div class="pdetails_ttl">
+                                                <h1>{{ product_detail.name }}</h1>
+                                                <span class="pdetails_cat_ttl">{{ product_detail.category }}</span>
+                                            </div>
+                                            <div class="pdetails_avail_stock">
+                                                <span class="avail_txt">Availablity</span>
+                                                {% if product_detail.available %}
+                                                    <span class="pd_details_stock">In stock</span>
+                                                {% else %}
+                                                    <span style="margin: 0 0 0 20px;
+                                                    background: #f92400;
+                                                    color: #fff;
+                                                    padding: 2px 15px;
+                                                    display: inline-block;
+                                                    border-radius: 5px;">Out of stock</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="pdetails_prices">
+                                                <span class="pd_price_old">Rs.{{ product_detail.marked_price }}</span>
+                                                <span class="pd_price_new">Rs.{{ product_detail.selling_price }}</span>
+                                            </div>
+                                            <div class="pdetails_short_des">
+                                                <p>{{ product_detail.description }}</p>
+                                                <span class="sku_num">
+                                                    <strong>SKU</strong>:{{ product_detail.sku }}
+                                                </span>
+                                            </div>
+                                            <div class="pdetails_clr_qty">
+                                                {% if product_detail.product_color %}
+                                                    <div class="colors">
+                                                        <select name="color">
+                                                            <option value="">Select Color</option>
+                                                            {% for color in product_detail.product_color.all %}
+                                                                <option value="">{{ color.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="quanlity">
+                                                    <input type="number" name="number" value="" min="1" max="100" placeholder="Quanlity">
+                                                </div>
+                                            </div>
+                                            <div class="pdetails_btns">
+                                                <div class="add_to_crt_pdetails">
+                                                    <a href="#"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add To Cart</a>
+                                                </div>
+                                                <div class="add_to_whislist_pdetails">
+                                                    <a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i> Add To Whislist</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        </section>
+        <section class="product_details_tabs pt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tb_specifications" data-toggle="tab" href="#spec" role="tab" aria-controls="spec" aria-selected="true">Specifications</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" id="tb_specifications" data-toggle="tab" href="#specific" role="tab" aria-controls="specific" aria-selected="false">Specifications</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" id="tb_reviews" data-toggle="tab" href="#reviewstb" role="tab" aria-controls="reviewstb" aria-selected="false">Reviews</a>
+                        </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="spec" role="tabpanel" aria-labelledby="tb_specification" name="spec">
+                            <div class="tabcontent">
+                                <div class="tecnical-specs">
+                                    <h4 class="name">
+                                        {{ product_detail.name }}
+                                    </h4>
+                                    <table>
+                                        <tbody>
+                                            {% for spec in product_detail.product_spec.all %}
+                                                <tr>
+                                                    <td>{{ spec.title }}</td>
+                                                    <td>{{ spec.value }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="tab-pane fade" id="specific" role="tabpanel" aria-labelledby="tb_specifications">
+                            <div class="tabcontent">
+                                <div class="tecnical-specs">
+                                    <h4 class="name">
+                                        Warch 42 mm Smart Watches
+                                    </h4>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>Height</td>
+                                                <td>38.6mm</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Meterial</td>
+                                                <td>Stainless Stee</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Case</td>
+                                                <td>40g</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Color</td>
+                                                <td>blue, gray, green, light blue, lime, purple, red, yellow</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Depth</td>
+                                                <td>10.5mm</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Width</td>
+                                                <td>33.3mm</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Size</td>
+                                                <td>Large, Medium, Small</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="tab-pane fade" id="reviewstb" role="tabpanel" aria-labelledby="tb_reviews" name="reviewstb">
+                            <div class="tabcontent">
+                                <div class="form-review style1">
+                                <div class="title">
+                                    Add a review 
+                                </div>
+                                <form action="#" method="get" accept-charset="utf-8">
+                                    <div class="review-form-name rv_input">
+                                        <input type="text" name="name-author" value="" placeholder="Name">
+                                    </div>
+                                    <div class="review-form-email rv_input">
+                                        <input type="text" name="email-author" value="" placeholder="Email">
+                                    </div>
+                                    <div class="review-form-comment">
+                                        <textarea name="review-text" placeholder="Your Name"></textarea>
+                                    </div>
+                                    <div class="btn-submit">
+                                        <button type="submit">Add Review</button>
+                                    </div>
+                                </form>
+                            </div>
+                                <ul class="review-list">
+                                    <li>
+                                        <div class="review-metadata">
+                                            <div class="name">
+                                                Ali Tufan : <span>April 3, 2016</span>
+                                            </div>
+                                        </div>
+                                        <!-- /.review-metadata -->
+                                        <div class="review-content">
+                                            <p>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                            </p>
+                                        </div>
+                                        <!-- /.review-content -->
+                                    </li>
+                                    <li>
+                                        <div class="review-metadata">
+                                            <div class="name">
+                                                Ali Tufan : <span>April 3, 2016</span>
+                                            </div>
+                                        </div>
+                                        <!-- /.review-metadata -->
+                                        <div class="review-content">
+                                            <p>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                            </p>
+                                        </div>
+                                        <!-- /.review-content -->
+                                    </li>
+                                    <li>
+                                        <div class="review-metadata">
+                                            <div class="name">
+                                                Ali Tufan : <span>April 3, 2016</span>
+                                            </div>
+                                        </div>
+                                        <!-- /.review-metadata -->
+                                        <div class="review-content">
+                                            <p>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                            </p>
+                                        </div>
+                                        <!-- /.review-content -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% if products %}
+            <section class="caro_products">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="featured_caro_holder brdr_bx">
+                                <div class="section_heading">
+                                    <div class="sectionheading_cont">
+                                        <div class="sectionttl">
+                                            <h2>Related Products</h2>
+                                        </div>
+                                        <div class="vi_all_prd_caro">
+                                            <a href="{% url 'related_list' product_detail.id %}">View All</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="featured_caro itms_caro owl-carousel owl-theme">
+                                    {% for prod in products %}
+                                        {% ifequal prod.brand|stringformat:"s" product_detail.brand|stringformat:"s" %}
+                                            <div class="item">
+                                                <div class="list_prd_itm text-center">
+                                                    <div class="prd_img">
+                                                        <a href="{% url 'product_detail' prod.id %}"><img src="{{ prod.photo_main.url }}" alt=""></a>
+                                                    </div>
+                                                    <div class="prd_infos">
+                                                        <h3> <a href="#">{{ prod.name }}</a></h3>
+                                                        <span class="price">Rs.{{ prod.marked_price }}</span>
+                                                    </div>
+                                                    <div class="prd_actions">
+                                                        <button class="addtocart">Add To Cart</button>
+                                                        <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endifequal %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+
+        {% include 'partials/_brands.html' %}
+
+    {% endblock %}
+</body>
+</html>

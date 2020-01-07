@@ -1,0 +1,28 @@
+{% if brands %}
+    <section class="caro_products brands">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="brdr_bx">
+                        <div class="section_heading">
+                            <div class="sectionheading_cont">
+                                <div class="sectionttl">
+                                    <h2>Available Brands</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="brand_caro itms_caro owl-carousel owl-theme">
+                            {% for brand in brands|slice:":8" %}
+                                <div class="item">
+                                    <a href="{% url 'brand_list' brand.id  %}">
+                                        <img src="{{ brand.photo.url }}" alt="">
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif %}
