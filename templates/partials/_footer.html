@@ -44,9 +44,10 @@
                 </div>
                 <div class="col-lg-5">
                     <div class="newsltter_from">
-                        <form>
+                        <form method="POST" action="{% url 'subscribe' %}">
+                            {% csrf_token %}
                             <div class="input-groups ">
-                                <input type="text" class="form-control" name="name" placeholder="Email Address...">
+                                <input type="email" class="form-control" name="subscriber_email" placeholder="Email Address...">
                                 <button type="submit" class="nwl_btn">Sign Up</button>
                             </div>
                         </form>
@@ -89,9 +90,11 @@
                                             <li>
                                                 <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
                                             </li>
-                                            <li>
-                                                <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                                            </li>
+                                            {% if contact.youtube %}
+                                                <li>
+                                                    <a href="{{ contact.youtube }}"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
+                                                </li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                 </div>

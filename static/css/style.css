@@ -828,7 +828,7 @@ section.caro_products {
     justify-content: center;
 }
 
-.list_prd_itm .prd_actions button.addtocart{
+.list_prd_itm .prd_actions a.addtocart{
     border: none;
     padding: 5px 22px;
     background: #4b4b4b;
@@ -836,7 +836,7 @@ section.caro_products {
     font-size: 12px;
 }
 
-.list_prd_itm .prd_actions button.addtocart:hover{
+.list_prd_itm .prd_actions a.addtocart:hover{
     background: #ff8202;
 }
 

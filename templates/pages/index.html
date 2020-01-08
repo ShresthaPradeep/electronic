@@ -12,8 +12,22 @@
 
 <body>
     {% block content %}
+   
         <div class="contentspacer"></div>
         {% include 'partials/_banner.html' %}
+             
+    {% if messages %}
+        {% for stuff in messages %}
+            <div class="alert alert-warning alert-dismissable" role="alert">
+                <button class="close" data-dismiss ="alert">
+                    <small><sup>x</sup></small>
+                </button>
+                {{ stuff }}
+            </div>
+            
+        {% endfor %}
+        <br/>
+    {% endif %}
         <section class="offers_ads">
             <div class="container">
                 <div class="row">
@@ -257,7 +271,8 @@
                                                                         <span class="price">Rs.{{ product.selling_price }}</span>
                                                                     </div>
                                                                     <div class="prd_actions">
-                                                                        <button class="addtocart">Add To Cart</button>
+                                                                        <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
+                                                                        <!-- <button class="addtocart">Add To Cart</button> -->
                                                                         <!-- <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button> -->
                                                                         <a href="{% url 'add_to_favourite' product.id %}" class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
                                                                     </div>
@@ -278,7 +293,6 @@
                 {% endfor %}
             {% endif %}
         {% endif %}
-        
         {% include 'partials/_brands.html' %}
         
     {% endblock %}

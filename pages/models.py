@@ -20,3 +20,9 @@ class Contact(models.Model):
     facebook = models.URLField(max_length=255, blank=True)
     twitter = models.URLField(max_length=255, blank=True)
     youtube = models.URLField(max_length=255, blank=True)
+
+class Subscriber(models.Model):
+    subscriber_email = models.EmailField(max_length = 200)
+
+    def __str__(self):
+        return str(self.subscriber_email)
