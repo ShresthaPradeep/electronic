@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+</head>
+<body>
+    {% block content %}
+        <div class="contentspacer"></div> 
+        <section class="cartpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="crt_heading">
+                            <h1>Shopping Cart</h1>
+                        </div>
+                        <table class="table prd_calc_tbl">
+                        <thead>
+                            <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form action="">
+                                {% for cart_product in cart_products %}
+                                        <tr>
+                                            <td>
+                                                <div class="td_cont_hldr">
+                                                    <div class="tbl_prd_img">  
+                                                        <img src="{{ cart_product.product.thumbnail_main.url }}" alt="">
+                                                    </div>
+                                                    <div class="tbl_prd_ttl">
+                                                        {{ cart_product.product.name }}
+                                                    </div>
+                                                    <div class="tbl_prd_prc">
+                                                        Rs.{{ cart_product.product.selling_price }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="tbl_prd_qty">
+                                                    <form>
+                                                        <input type="number" name="number" value="{{ cart_product.quantity }}" min="1" max="100" placeholder="Quanlity">
+                                                    </form>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="tbl_total">
+                                                    {{ cart_product.total_price }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'remove_from_cart' cart_product.id %}"><button class="crt_dlt"><i class="fa fa-trash-o" aria-hidden="true"></i></button></a>
+                                            </td>
+                                        </tr><!-- tr -->
+                                {% endfor %}
+                            </form>
+                        </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="cart-totals">
+                            <h3>Cart Totals</h3>
+                            <form action="#" method="get" accept-charset="utf-8">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>Subtotal</td>
+                                            <td class="subtotal">Rs.{{ total }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shipping</td>
+                                            <td class="btn-radio">
+                                                <div class="radio-info">
+                                                    <input type="radio" id="flat-rate" checked="" name="radio-flat-rate">
+                                                    <label for="flat-rate">Flat Rate: <span>Rs500</span></label>
+                                                </div>
+                                                <div class="radio-info">
+                                                    <input type="radio" id="free-shipping" name="radio-flat-rate">
+                                                    <label for="free-shipping">Free Shipping</label>
+                                                </div>
+                                            </td>
+                                            <!-- /.btn-radio -->
+                                        </tr>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td class="price-total">Rs.{{ total }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="btn-cart-totals">
+                                    <a href="{% url 'order' %}" class="checkout" title="">Proceed to Order</a>
+                                </div>
+                                <!-- /.btn-cart-totals -->
+                            </form>
+                            <!-- /form -->
+                        </div>
+                        <!-- /.cart-totals -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
+</body>
+</html>

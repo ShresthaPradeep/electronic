@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from products.models import Category, Brand, Type, Feature, Product
 from pages.models import Contact
+from accounts.models import CartProduct
+
 
 def global_context(request):
     categories = Category.objects.all()
@@ -13,4 +16,12 @@ def global_context(request):
         "brands": brands,
         "types": types,
         "contacts": contacts,
+    }
+
+@login_required
+def after_login_context(request):
+
+    cart_products = CartProduct.objects.filter(user = request.user)
+    return {
+        "cart_products": cart_products,
     }

@@ -46,6 +46,7 @@ class Product(models.Model):
     sku = models.CharField(max_length=255, blank=True, null=True, unique=True)
     photo_main = models.ImageField(upload_to = 'products/%Y/%m/%d/')
     thumbnail_main = models.ImageField(upload_to = 'products/thumbnails/%Y/%m/%d/')
+    view_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

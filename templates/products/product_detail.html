@@ -13,6 +13,21 @@
     {% block content %}
         <div class="contentspacer"></div> 	
         <section class="product_details_top">
+               
+            <div class="container">
+                {% if messages %}
+                    {% for stuff in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss ="alert">
+                                <small><sup>x</sup></small>
+                            </button>
+                            {{ stuff }}
+                        </div>
+                        
+                    {% endfor %}
+                    <br/>
+                {% endif %}
+            </div>
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -80,29 +95,31 @@
                                                     <strong>SKU</strong>:{{ product_detail.sku }}
                                                 </span>
                                             </div>
-                                            <div class="pdetails_clr_qty">
-                                                {% if product_detail.product_color %}
-                                                    <div class="colors">
-                                                        <select name="color">
-                                                            <option value="">Select Color</option>
-                                                            {% for color in product_detail.product_color.all %}
-                                                                <option value="">{{ color.name }}</option>
-                                                            {% endfor %}
-                                                        </select>
+                                            <form action="{% url 'add_to_cart' product_detail.id %}">
+                                                <div class="pdetails_clr_qty">
+                                                    {% if product_detail.product_color %}
+                                                        <div class="colors">
+                                                            <select name="color" required>
+                                                                <option value="">Select Color</option>
+                                                                {% for color in product_detail.product_color.all %}
+                                                                    <option value="{{ color.name }}">{{ color.name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="quanlity">
+                                                        <input type="number" name="number" value="" min="1" max="100" placeholder="Quanlity">
                                                     </div>
-                                                {% endif %}
-                                                <div class="quanlity">
-                                                    <input type="number" name="number" value="" min="1" max="100" placeholder="Quanlity">
                                                 </div>
-                                            </div>
-                                            <div class="pdetails_btns">
-                                                <div class="add_to_crt_pdetails">
-                                                    <a href="#"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add To Cart</a>
+                                                <div class="pdetails_btns">
+                                                    <div class="add_to_crt_pdetails">
+                                                        <button type="submit" class="btn"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add To Cart</button>
+                                                    </div>
+                                                    <div class="add_to_whislist_pdetails">
+                                                        <a href="{% url 'add_to_wait' product_detail.id %}"><i class="fa fa-heart-o" aria-hidden="true"></i> Add To Whislist</a>
+                                                    </div>
                                                 </div>
-                                                <div class="add_to_whislist_pdetails">
-                                                    <a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i> Add To Whislist</a>
-                                                </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

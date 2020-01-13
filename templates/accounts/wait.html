@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+	
+    <!-- Plugins css -->
+    <link rel="stylesheet" href="css/plugins.css">
+</head>
+	<body>
+       
+	{% block content %}
+        <div class="contentspacer"></div> 
+        <section class="cartpg">
+               
+            <div class="container">
+                {% if messages %}
+                    {% for stuff in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss ="alert">
+                                <small><sup>x</sup></small>
+                            </button>
+                            {{ stuff }}
+                        </div>
+                        
+                    {% endfor %}
+                    <br/>
+                {% endif %}
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="crt_heading">
+                            <h1>Wait List</h1>
+                        </div>
+                        <table class="table prd_calc_tbl">
+                        <thead>
+                            <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Add To Cart</th>
+                            <th scope="col">Delete</th>
+                            <th scope="col">Availability</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for wait_product in wait_products %}
+                                <tr>
+                                    <td>
+                                        <div class="td_cont_hldr">
+                                            <div class="tbl_prd_img">  
+                                                <img src="{{ wait_product.product.thumbnail_main.url }}" alt="">
+                                            </div>
+                                            <div class="tbl_prd_ttl">
+                                                {{ wait_product.product.name }}
+                                            </div>
+                                            <div class="tbl_prd_prc">
+                                                Rs.{{ wait_product.product.selling_price }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <form action="{% url 'add_to_cart_from_wait' wait_product.product.id %}">
+                                        <td>
+                                            <div class="colors">
+                                                <select name="color" required>
+                                                    <option value="">Select Color</option>
+                                                    {% for color in wait_product.product.product_color.all %}
+                                                        <option value="{{ color.name }}">{{ color.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="quanlity">
+                                                <input type="number" name="number" value="" min="1" max="100" placeholder="Quanlity">
+                                            </div>
+                                        </td>
+                                        <td>
+                                                    <button type="submit" class="crt_ad">Add To Cart</button>
+                                        </td>
+                                    </form>
+                                    <td>
+                                        <a href="{% url 'remove_from_wait' wait_product.id %}"><button class="crt_dlt"><i class="fa fa-trash-o" aria-hidden="true"></i></button></a>
+                                    </td>
+                                    <td>
+                                        {% if wait_product.product.available %}
+                                            <span class="avilable_tg_wait">Available</span>
+                                        {% else %}
+                                            <span class="avilable_tg_wait">Not Available</span>
+                                        {% endif %}
+                                    </td>
+                                </tr><!-- tr -->
+                            {% endfor %}
+
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
+</body>
+</html>

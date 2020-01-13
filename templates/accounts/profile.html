@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+	
+
+    <!-- Plugins css -->
+    <link rel="stylesheet" href="css/plugins.css">
+</head>
+<body>
+    {% block content %}
+        <div class="contentspacer"></div> 
+        {% if profiles %}
+            <section class="cartpg">
+                <div class="container">
+                    <div class="row">
+                        {% for profile in profiles %}
+                            <div class="col-md-8 mx-auto">
+                                <form method="POST" action="{% url 'edit_profile' %}" enctype='multipart/form-data'>
+                                    {% csrf_token %}
+                                    <div class="box-checkout profile__edit__head">
+                                        <div class="checkout-login adprd_heading">
+                                            <div class="crt_heading">
+                                                <h1>My Account</h1>
+                                            </div>
+                                            <!-- <a class="prof__edit" href="">Edit</a> -->
+                                        </div>
+                                    </div>
+                                    <div class="user__infos__profile">
+                                        <h2>General Information</h2>
+                                        <div class="prof__infos__list">
+                                            <label>User Name</label>
+                                            <input type="text" name="username" value="{{ profile.username }}" class="info__text">
+                                        </div>
+                                        <div class="prof__infos__list">
+                                            <label>User Profile Image</label>
+                                            <span class="info__text">
+                                                <img src="{{ profile.photo.url }}" alt="">
+                                                <input type="file" name="photo" value= "Upload from PC">
+                                            </span>                            
+                                        </div>
+                                        <div class="prof__infos__list">
+                                            <label>Address</label>
+                                            <input type="text" name="address" value="{{ profile.address }}" class="info__text">
+                                        </div>
+                                        <div class="prof__infos__list">
+                                            <label>Email</label>
+                                            <input type="email" name="email" value="{{ profile.email }}" class="info__text">
+                                        </div>
+                                        <div class="prof__infos__list">
+                                            <label>Phone Number</label>
+                                            <input type="text" name="phone" value="{{ profile.phone }}" class="info__text">
+                                        </div>
+                                    </div>
+                                    <div class="user__infos__profile">
+                                        <h2>Shipping Information</h2>
+                                        <div class="prof__infos__list">
+                                            <label>Address Two</label>
+                                            <input type="text" name="ship_address2" value="{{ profile.ship_address2 }}" class="info__text">
+                                        </div>
+                                        <div class="prof__infos__list">
+                                            <label>Address</label>
+                                            <input type="text" name="ship_address1" value="{{ profile.ship_address1 }}" class="info__text">
+                                        </div>
+                                        <div class="prof__infos__list">
+                                            <label>Email</label>
+                                            <input type="text" name="ship_email" value="{{ profile.ship_email }}" class="info__text">
+                                        </div>
+                                        <div class="prof__infos__list">
+                                            <label>Phone Number</label>
+                                            <input type="text" name="ship_phone" value="{{ profile.ship_phone }}" class="info__text">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-success" style="float: right;"> Update</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    {% endblock %}
+</body>
+</html>

@@ -1443,7 +1443,7 @@ font-size: 35px;
     color: #333;
 }
 
-.add_to_crt_pdetails a {
+.add_to_crt_pdetails button {
     background-color: #f92400;
     padding: 15px 38px;
     border-radius: 50px;

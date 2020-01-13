@@ -7,10 +7,21 @@ from .models import Product, Brand, Feature, Category
 
 # Create your views here.
 
-class ProductDetailView(generic.DetailView):
-    context_object_name = 'product_detail'
-    model = Product
-    template_name = 'products/product_detail.html'
+def product_view(request, pk):
+    product = get_object_or_404(Product, id = pk)
+    product.view_count = product.view_count + 1
+    product.save()
+    
+    context = {
+        'product_detail': product,
+    }
+    return render(request, 'products/product_detail.html', context)
+
+
+# class ProductDetailView(generic.DetailView):
+#     context_object_name = 'product_detail'
+#     model = Product
+#     template_name = 'products/product_detail.html'
 
 
 class BrandListView(generic.ListView):
@@ -32,6 +43,7 @@ class FeatureListView(generic.ListView):
 class CategoryListView(generic.ListView):
     context_object_name = 'category'
     queryset = Category.objects.all()
+    paginate_by = '4'
     
     def get_queryset(self):
         return self.queryset.filter(id=self.kwargs.get('pk'))
@@ -45,3 +57,13 @@ class RelatedListView(generic.ListView):
     def get_queryset(self):
         return self.queryset.filter(id=self.kwargs.get('pk'))
 
+
+class MostViewedListView(generic.ListView):
+    context_object_name = 'most_viewed'
+    model = Product
+    template_name = 'products/most_viewed.html'
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(view_count__gte =1).order_by('-view_count')
+        
+        return queryset

@@ -146,13 +146,16 @@
                                                 </a>
                                             </span>
                                         </div>
-                                        <div class="hd_prof shop_itm">
-                                            <span class="shop_itm_txt">
-                                                <a href="#">
-                                                    <img src="images/216.jpg" alt="">
-                                                </a>
-                                            </span>
-                                        </div>
+                                        {% if user.is_authenticated %}
+                                            <div class="hd_prof shop_itm">
+                                                <span class="shop_itm_txt">
+                                                    <a href="{% url 'profile' %}">
+                                                        profile
+                                                        <!-- <img src="images/216.jpg" alt=""> -->
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        {% endif %}
                                         <!-- drop downs -->
                                         <div class="dprdwn fav_drp">
                                             <span class="drpdwn_cls">close</span>
@@ -229,7 +232,7 @@
                                                 </ul>
                                                 <div class="drp_more_items">
                                                     <div class="drp_vew_mritemsbtn">
-                                                        <a href="#">View All Items</a>
+                                                        <a href="{% url 'favourite' %}">View All Items</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -244,73 +247,33 @@
                                             </div>
                                             <div class="drp_added_itms">
                                                 <ul>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
+                                                    {% for cart_product in cart_products %}
+                                                        <li>
+                                                            <div class="drp_added_itms_lst">
+                                                                <div class="added_itms_img">
+                                                                    <a href="#">
+                                                                        <img src="{{ cart_product.product.thumbnail_main.url }}" alt="">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="drp_added_itms_cont_hldr">
+                                                                    <div class="drp_added_itms_cont">
+                                                                        <span class="drp_added_itms_txt">
+                                                                                    <a href="{% url 'product_detail' cart_product.product.id %}">{{ cart_product.product.name }}</a>
+                                                                                    <span class="drp_added_itms_prc">Rs. {{ cart_product.product.selling_price }}</span>
+                                                                        </span>
 
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus Viverra Urna</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
-
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                                    </div>
+                                                                    <div class="dlt_drp_added_itm">
+                                                                        <a href="{% url 'remove_from_cart' cart_product.id %}"><button><i class="fa fa-window-close" aria-hidden="true"></i></button></a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
-
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+                                                        </li>
+                                                    {% endfor %}
                                                 </ul>
                                                 <div class="drp_more_items">
                                                     <div class="drp_vew_mritemsbtn">
-                                                        <a href="#">View All Items</a>
+                                                        <a href="{% url 'cart' %}">View All Items</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -391,7 +354,7 @@
                                                 </ul>
                                                 <div class="drp_more_items">
                                                     <div class="drp_vew_mritemsbtn">
-                                                        <a href="#">View All Items</a>
+                                                        <a href="{% url 'wait' %}">View All Items</a>
                                                     </div>
                                                 </div>
                                             </div>

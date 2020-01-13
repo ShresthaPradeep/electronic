@@ -16,6 +16,7 @@ class Index(generic.TemplateView):
         context['brands'] = Brand.objects.all()
         context['features'] = Feature.objects.all()
         context['products'] = Product.objects.all()
+        context['most_viewed'] = Product.objects.filter(view_count__gte =1).order_by('-view_count')
         return context
 
 
