@@ -25,43 +25,55 @@ def product_view(request, pk):
 
 
 class BrandListView(generic.ListView):
-    context_object_name = 'brands'
-    queryset = Brand.objects.all()
-    
+    context_object_name = 'products'
+    model = Product
+    template_name = 'products/products_list.html'
+    paginate_by = 20
+
     def get_queryset(self):
-        return self.queryset.filter(id=self.kwargs.get('pk'))
+        queryset = Product.objects.filter(brand_id = self.kwargs.get('pk'))
+        return queryset
     
 class FeatureListView(generic.ListView):
-    context_object_name = 'features'
-    queryset = Feature.objects.all()
-    template_name = 'products/features_list.html'
-    
+    context_object_name = 'products'
+    model = Product
+    template_name = 'products/products_list.html'
+    paginate_by = 20
+
     def get_queryset(self):
-        return self.queryset.filter(id=self.kwargs.get('pk'))
+        queryset = Product.objects.filter(feature_id = self.kwargs.get('pk'))
+        return queryset
+        
 
 
 class CategoryListView(generic.ListView):
-    context_object_name = 'category'
-    queryset = Category.objects.all()
-    paginate_by = '4'
-    
+    context_object_name = 'products'
+    model = Product
+    template_name = 'products/products_list.html'
+    paginate_by = 20
+
     def get_queryset(self):
-        return self.queryset.filter(id=self.kwargs.get('pk'))
+        queryset = Product.objects.filter(category_id = self.kwargs.get('pk'))
+        return queryset
 
 
 class RelatedListView(generic.ListView):
-    context_object_name = 'related'
-    queryset = Product.objects.all()
-    template_name = 'products/related_list.html'
-    
+    context_object_name = 'products'
+    model = Product
+    template_name = 'products/products_list.html'
+    paginate_by = 20
+
     def get_queryset(self):
-        return self.queryset.filter(id=self.kwargs.get('pk'))
+        queryset = Product.objects.filter(brand_id = self.kwargs.get('pk'))
+        return queryset
+    
 
 
 class MostViewedListView(generic.ListView):
-    context_object_name = 'most_viewed'
+    context_object_name = 'products'
     model = Product
-    template_name = 'products/most_viewed.html'
+    template_name = 'products/products_list.html'
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = Product.objects.filter(view_count__gte =1).order_by('-view_count')

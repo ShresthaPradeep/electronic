@@ -74,23 +74,23 @@
             </div>
         </section>
         
-        <section class="caro_products">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="featured_caro_holder brdr_bx">
-                            <div class="section_heading">
-                                <div class="sectionheading_cont">
-                                    <div class="sectionttl">
-                                        <h2>Most Viewed</h2>
-                                    </div>
-                                    <div class="vi_all_prd_caro">
-                                        <a href="{% url 'most_viewed' %}">View All</a>
+        {% if most_viewed %}
+            <section class="caro_products">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="featured_caro_holder brdr_bx">
+                                <div class="section_heading">
+                                    <div class="sectionheading_cont">
+                                        <div class="sectionttl">
+                                            <h2>Most Viewed</h2>
+                                        </div>
+                                        <div class="vi_all_prd_caro">
+                                            <a href="{% url 'most_viewed' %}">View All</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="featured_caro itms_caro owl-carousel owl-theme">
-                                {% if most_viewed %}
+                                <div class="featured_caro itms_caro owl-carousel owl-theme">
                                     {% for product in most_viewed %}
                                         <div class="item">
                                             <div class="list_prd_itm text-center">
@@ -110,13 +110,13 @@
                                             </div>
                                         </div>
                                     {% endfor %}
-                                {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        {% endif %}
 
         {% if products %}
             {% if features %}
@@ -160,7 +160,9 @@
                                                                         <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
                                                                         <!-- <button class="addtocart">Add To Cart</button> -->
                                                                         <!-- <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button> -->
+                                                                        
                                                                         <a href="{% url 'add_to_favourite' product.id %}" class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </div>

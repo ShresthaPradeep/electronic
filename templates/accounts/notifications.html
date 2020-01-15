@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+	
+</head>
+<body>
+    {% block content %}
+        <div class="contentspacer"></div> 
+        <section class="cartpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="crt_heading">
+                            <h1>Your Notifications</h1>
+                        </div>
+                        <div class="notifpg__list">
+                            <ul>
+                                {% for notification in notifications %}
+                                    <li>
+                                        <a>
+                                            <div class="notif__sml__img">
+                                                <!-- <img src="images/ar01.jpg" alt=""> -->
+                                            </div>
+                                            <div class="notif__text">
+                                                <div class="notif__ttl">
+                                                    {{ notification.title }}
+                                                    {{ notification.message }}
+                                                </div>
+                                                <div class="notif__dat">
+                                                    {{ notification.created_date }}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
+</body>
+</html>

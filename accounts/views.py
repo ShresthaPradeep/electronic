@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.views import generic
 from django.urls import reverse_lazy
 from products.models import Product
-from .models import Favourite, Cart, CartProduct, WaitList, UserProfile
+from .models import Favourite, Cart, CartProduct, WaitList, UserProfile, Notification, Order
 from .forms import RegistrationForm, LoginForm, UserUpdateForm, ProfileUpdateForm
 
 # Create your views here.
@@ -136,17 +136,26 @@ def add_to_cart(request, pk):
 
     if 'color' in request.GET:
         color = request.GET['color']
-
+     
     if product.available:
         cart_product, created = CartProduct.objects.get_or_create(
             product=product,
             user = request.user,
             quantity = quantity,
             color = color,
-            checked_out = False
+            checked_out = False,
             )
-        return redirect('wait')
-    
+        
+        cart = get_object_or_404(Cart, user = request.user)
+        if cart:
+            cart.product.add(cart_product)
+            cart.save()
+        else:
+            cart = Cart.objects.create(user=request.user)
+            cart.product.add(cart_product)
+            cart.save()
+
+        return redirect('cart')
     else:
         messages.info(request, ("Product is out of stock"))
         return redirect('product_detail', pk)
@@ -172,6 +181,18 @@ class CartView(LoginRequiredMixin, generic.View):
         }
         
         return render(self.request, 'accounts/cart.html', context)
+
+def edit_cart(request):
+    for key, value in request.POST.items():
+        if key.startswith('q'):
+            key = key.split('q_')
+            k = int(key[1])
+            product = get_object_or_404(CartProduct, id = k)
+            if product:
+                product.quantity = value
+                product.save()
+
+    return redirect('cart')
 
     
 class WaitView(LoginRequiredMixin, generic.View):
@@ -210,24 +231,20 @@ def add_to_cart_from_wait(request, pk):
             user = request.user,
             quantity = quantity,
             color = color,
-            checked_out = False
+            checked_out = False,
             )
-        return redirect('wait')
-    
 
-    # cart_qs = Cart.objects.filter(user = request.user)
-    # if cart_qs.exists():
-    #     cart = cart_qs[0]
-    #     if cart.product.filter(product__id = product.id).exists:
-    #         messages.info(request, 'You already have that product in your cart')
-    #     else:
-    #         cart.product.add(cart_product)
-    #         cart.save()
-    # else:
-    #     cart = Cart.objects.create(user=request.user)
-    #     cart.product.add(cart_product)
-    #     cart.save()
+        cart = get_object_or_404(Cart, user = request.user)
+        if cart:
+            cart.product.add(cart_product)
+            cart.save()
+        else:
+            cart = Cart.objects.create(user=request.user)
+            cart.product.add(cart_product)
+            cart.save()
     
+        return redirect('wait')
+
     else:
         messages.info(request, ("Product is out of stock"))
         return redirect('wait')
@@ -276,8 +293,18 @@ def add_to_cart_from_favourite(request, pk):
             user = request.user,
             quantity = quantity,
             color = color,
-            checked_out = False
+            checked_out = False,
             )
+
+        cart = get_object_or_404(Cart, user = request.user)
+        if cart:
+            cart.product.add(cart_product)
+            cart.save()
+        else:
+            cart = Cart.objects.create(user=request.user)
+            cart.product.add(cart_product)
+            cart.save()
+            
         return redirect('favourite')
     else:
         messages.info(request, (" Product is not available!! "))
@@ -290,9 +317,20 @@ def remove_from_favourite(request, pk):
         
     return redirect('favourite')
 
+
+class NotificationView(generic.View):
+    def get(self, *args, **kwargs):
+        notifications = Notification.objects.filter(user = self.request.user)
+        context = {
+            'notifications': notifications,
+        }
+        return render(self.request, 'accounts/notifications.html', context)
+
+
 class OrderView(generic.View):
     def get(self, *args, **kwargs):
         order_products = CartProduct.objects.filter(user = self.request.user)
+        cart = get_object_or_404(Cart, user = self.request.user)
 
         total = 0
         for product in order_products:
@@ -301,5 +339,37 @@ class OrderView(generic.View):
         context = {
             'order_products': order_products,
             'total': total,
+            'cart': cart
         }
         return render(self.request, 'accounts/order.html', context)
+
+
+def add_to_order(request, pk):
+    cart = get_object_or_404(Cart, id = pk)
+
+    if request.method=="POST":
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email_address = request.POST['email_address']
+        phone = request.POST['phone']
+        address1 = request.POST['address1']
+        address2 = request.POST['address2']
+        notes = request.POST['notes']
+        order = Order.objects.get_or_create(
+            user = request.user,
+            first_name = first_name,
+            last_name = last_name,
+            email = email_address,
+            phone = phone,
+            address = address1,
+            building = address2,
+            order_notes = notes,
+            cart = cart,
+            )
+        cart.save()
+
+        cart_products = CartProduct.objects.filter(user = request.user)
+        for cart_product in cart_products:
+            cart_product.checked_out = True
+            cart_product.save()
+    return redirect('index')

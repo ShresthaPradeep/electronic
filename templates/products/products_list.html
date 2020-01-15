@@ -20,13 +20,14 @@
                         <div class="row">
                             <div class="prd_list_heading">
                                 <h1>Product Listings</h1>
-                                <spna class="showing_itms">showing 1–15 of 20 results</spna>
+                                {% if page_obj.paginator.num_pages != 1 %}
+                                    <span>Showing {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} results</span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                     <div class="row no-gutters">
-                        {% for brand in brands %}
-                            {% for product in brand.brand_products.all %}
+                        {% for product in products %}
                                 <div class="col-lg-3 col-md-3 col-sm-6 col-12">
                                     <div class="list_prd_itm text-center">
                                         <div class="prd_img">
@@ -45,7 +46,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}
                         {% endfor %}
                     </div>
 
@@ -53,29 +53,32 @@
                         <div class="row">
                         <div class="prd_pagination">
                             <div class="blog-pagination">
-                                <span>Showing 1–15 of 20 results</span>
+                                {% if page_obj.paginator.num_pages != 1 %}
+                                    <span>Showing {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} results</span>
+                                {% endif %}
                                 <ul class="flat-pagination style1">
                                     <li class="prev">
-                                        <a href="#" title="">
-                                            Prev Page
-                                        </a>
+                                        {% if page_obj.has_previous %}
+                                            <a href="?page={{ page_obj.previous_page_number }}">Prev Page</a>
+                                        {% endif %}
                                     </li>
-                                    <li>
-                                        <a href="#" class="waves-effect" title="">01</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="waves-effect" title="">02</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#" class="waves-effect" title="">03</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="waves-effect" title="">04</a>
-                                    </li>
+                                    {% if page_obj.paginator.num_pages != 1 %}
+                                        {% for i in page_obj.paginator.page_range %}
+                                            {% if page_obj.number == i %}
+                                                <li class="active">
+                                                    <a>{{ i }}</a>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <a href="?page={{i}}" class="waves-effect" title="">{{ i }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                     <li class="next">
-                                        <a href="#" title="">
-                                        Next Page
-                                        </a>
+                                        {% if page_obj.has_next %}
+                                            <a href="?page={{ page_obj.next_page_number }}">Next Page</a>
+                                        {% endif %}
                                     </li>
                                 </ul>
                                 <!-- /.flat-pagination style1 -->

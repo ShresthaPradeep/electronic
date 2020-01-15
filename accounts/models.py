@@ -4,7 +4,7 @@ from django.db import models
 from products.models import Product
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE)
+    user = models.OneToOneField(User, on_delete = models.CASCADE, related_name='users')
     username = models.CharField(max_length=200)
     photo = models.ImageField(upload_to = 'users/%Y/%m/%d/', blank = True, null = True, default='default_user.png')
     address = models.CharField(max_length=200, blank = True, null = True)
@@ -47,16 +47,16 @@ class CartProduct(models.Model):
         return self.quantity * self.product.selling_price
 
 class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete = models.CASCADE)
     product = models.ManyToManyField(CartProduct)
     start_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username + "_________" + str(self.start_date)
 
 
 class Order(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
@@ -64,6 +64,17 @@ class Order(models.Model):
     address = models.CharField(max_length=200)
     building = models.CharField(max_length=200, null=True, blank = True)
     order_notes = models.TextField(max_length=300, null=True, blank = True)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username + "______" + str(self.created_date)
+
+class Notification(models.Model):
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add = True)
+
+    def __str__(self):
+        return self.title

@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.views import generic
 from pages.models import Banner, Subscriber
 from products.models import Brand, Feature, Product
+from accounts.models import Favourite
 
 from .forms import SubscriberForm
 
@@ -15,6 +16,7 @@ class Index(generic.TemplateView):
         context['banners'] = Banner.objects.all()
         context['brands'] = Brand.objects.all()
         context['features'] = Feature.objects.all()
+        context['favourites'] = Favourite.objects.filter(user = self.request.user)
         context['products'] = Product.objects.all()
         context['most_viewed'] = Product.objects.filter(view_count__gte =1).order_by('-view_count')
         return context

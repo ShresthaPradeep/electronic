@@ -150,8 +150,8 @@
                                             <div class="hd_prof shop_itm">
                                                 <span class="shop_itm_txt">
                                                     <a href="{% url 'profile' %}">
+                                                        <img src="{{ request.user.users.photo.url }}" alt="">
                                                         profile
-                                                        <!-- <img src="images/216.jpg" alt=""> -->
                                                     </a>
                                                 </span>
                                             </div>
@@ -164,78 +164,46 @@
                                                             Favourites
                                                         </span>
                                             </div>
-                                            <div class="drp_added_itms">
-                                                <ul>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
+                                            {% if user.is_authenticated %}
+                                                <div class="drp_added_itms">
+                                                    {% if favourites %}
+                                                        <ul>
+                                                            {% for favourite in favourites %}
+                                                                <li>
+                                                                    <div class="drp_added_itms_lst">
+                                                                        <div class="added_itms_img">
+                                                                            <a href="{% url 'product_detail' favourite.product.id %}">
+                                                                                <img src="{{ favourite.product.thumbnail_main.url }}" alt="">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="drp_added_itms_cont_hldr">
+                                                                            <div class="drp_added_itms_cont">
+                                                                                <span class="drp_added_itms_txt">
+                                                                                            <a href="{% url 'product_detail' favourite.product.id %}">{{ favourite.product.name }}</a>
+                                                                                            <span class="drp_added_itms_prc">Rs. {{ favourite.product.selling_price }}</span>
+                                                                                </span>
 
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
+                                                                            </div>
+                                                                            <div class="dlt_drp_added_itm">
+                                                                                <a href="{% url 'remove_from_favourite' favourite.id %}"><button><i class="fa fa-window-close" aria-hidden="true"></i></button></a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                    <div class="drp_more_items">
+                                                        <div class="drp_vew_mritemsbtn">
+                                                            <a href="{% url 'favourite' %}">View All Items</a>
                                                         </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus Viverra Urna</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
-
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
-
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <div class="drp_more_items">
-                                                    <div class="drp_vew_mritemsbtn">
-                                                        <a href="{% url 'favourite' %}">View All Items</a>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            {% else %}
+                                                <p>You need to be logged in to view your Favourites.</p>
+                                                <a href="{% url 'login' %}">Login</a>
+                                            {% endif %}
+
                                         </div>
 
                                         <div class="dprdwn cart_drp">
@@ -245,38 +213,45 @@
                                                             Cart
                                                         </span>
                                             </div>
-                                            <div class="drp_added_itms">
-                                                <ul>
-                                                    {% for cart_product in cart_products %}
-                                                        <li>
-                                                            <div class="drp_added_itms_lst">
-                                                                <div class="added_itms_img">
-                                                                    <a href="#">
-                                                                        <img src="{{ cart_product.product.thumbnail_main.url }}" alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div class="drp_added_itms_cont_hldr">
-                                                                    <div class="drp_added_itms_cont">
-                                                                        <span class="drp_added_itms_txt">
-                                                                                    <a href="{% url 'product_detail' cart_product.product.id %}">{{ cart_product.product.name }}</a>
-                                                                                    <span class="drp_added_itms_prc">Rs. {{ cart_product.product.selling_price }}</span>
-                                                                        </span>
+                                            {% if user.is_authenticated %}
+                                                <div class="drp_added_itms">
+                                                    <ul>
+                                                        {% for cart_product in cart_products %}
+                                                            {% if not cart_product.checked_out %}
+                                                                <li>
+                                                                    <div class="drp_added_itms_lst">
+                                                                        <div class="added_itms_img">
+                                                                            <a href="#">
+                                                                                <img src="{{ cart_product.product.thumbnail_main.url }}" alt="">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="drp_added_itms_cont_hldr">
+                                                                            <div class="drp_added_itms_cont">
+                                                                                <span class="drp_added_itms_txt">
+                                                                                            <a href="{% url 'product_detail' cart_product.product.id %}">{{ cart_product.product.name }}</a>
+                                                                                            <span class="drp_added_itms_prc">Rs. {{ cart_product.product.selling_price }}</span>
+                                                                                </span>
 
+                                                                            </div>
+                                                                            <div class="dlt_drp_added_itm">
+                                                                                <a href="{% url 'remove_from_cart' cart_product.id %}"><button><i class="fa fa-window-close" aria-hidden="true"></i></button></a>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="dlt_drp_added_itm">
-                                                                        <a href="{% url 'remove_from_cart' cart_product.id %}"><button><i class="fa fa-window-close" aria-hidden="true"></i></button></a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                                <div class="drp_more_items">
-                                                    <div class="drp_vew_mritemsbtn">
-                                                        <a href="{% url 'cart' %}">View All Items</a>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                    <div class="drp_more_items">
+                                                        <div class="drp_vew_mritemsbtn">
+                                                            <a href="{% url 'cart' %}">View All Items</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            {% else %}
+                                                <p>You need to be logged in to view your Favourites.</p>
+                                                <a href="{% url 'login' %}">Login</a>
+                                            {% endif %}
                                         </div>
 
                                         <div class="dprdwn wait_drp">
@@ -286,78 +261,43 @@
                                                             Wait List
                                                         </span>
                                             </div>
-                                            <div class="drp_added_itms">
-                                                <ul>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
+                                            {% if user.is_authenticated %}
+                                                <div class="drp_added_itms">
+                                                    <ul>
+                                                        {% for wish_product in wish_products %}
+                                                            <li>
+                                                                <div class="drp_added_itms_lst">
+                                                                    <div class="added_itms_img">
+                                                                        <a href="{% url 'product_detail' wish_product.product.id %}">
+                                                                            <img src="{{ wish_product.product.thumbnail_main.url }}" alt="">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="drp_added_itms_cont_hldr">
+                                                                        <div class="drp_added_itms_cont">
+                                                                            <span class="drp_added_itms_txt">
+                                                                                        <a href="{% url 'product_detail' wish_product.product.id %}">{{ wish_product.product.name }}</a>
+                                                                                        <span class="drp_added_itms_prc">Rs. {{ wish_product.product.selling_price }}</span>
+                                                                            </span>
 
+                                                                        </div>
+                                                                        <div class="dlt_drp_added_itm">
+                                                                            <a href="{% url 'remove_from_wait' wish_product.id %}"><button><i class="fa fa-window-close" aria-hidden="true"></i></button></a>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                    <div class="drp_more_items">
+                                                        <div class="drp_vew_mritemsbtn">
+                                                            <a href="{% url 'wait' %}">View All Items</a>
                                                         </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus Viverra Urna</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
-
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="added_itms_img">
-                                                                <a href="#">
-                                                                    <img src="images/ar01.jpg" alt="">
-                                                                </a>
-                                                            </div>
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
-
-                                                                </div>
-                                                                <div class="dlt_drp_added_itm">
-                                                                    <button><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <div class="drp_more_items">
-                                                    <div class="drp_vew_mritemsbtn">
-                                                        <a href="{% url 'wait' %}">View All Items</a>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            {% else %}
+                                                <p>You need to be logged in to view your Favourites.</p>
+                                                <a href="{% url 'login' %}">Login</a>
+                                            {% endif %}
                                         </div>
 
                                         <div class="dprdwn notifi_drp">
@@ -367,28 +307,35 @@
                                                             Notifications
                                                         </span>
                                             </div>
-                                            <div class="drp_added_itms">
-                                                <ul>
-                                                    <li>
-                                                        <div class="drp_added_itms_lst">
-                                                            <div class="drp_added_itms_cont_hldr">
-                                                                <div class="drp_added_itms_cont">
-                                                                    <span class="drp_added_itms_txt">
-                                                                                <a href="#">Fhasellus Viverra Urna Fhasellus Viverra Urna</a>
-                                                                                <span class="drp_added_itms_prc">Rs. 500</span>
-                                                                    </span>
+                                            {% if user.is_authenticated %}
+                                                <div class="drp_added_itms">
+                                                    <ul>
+                                                        {% for notification in notifications %}
+                                                            <li>
+                                                                <div class="drp_added_itms_lst">
+                                                                    <div class="drp_added_itms_cont_hldr">
+                                                                        <div class="drp_added_itms_cont">
+                                                                            <span class="drp_added_itms_txt">
+                                                                                        <a href="{% url 'notification' %}">{{ notification.title }}</a>
+                                                                                        <span class="drp_added_itms_prc">{{ notification.message }}</span>
+                                                                            </span>
 
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                    <div class="drp_more_items">
+                                                        <div class="drp_vew_mritemsbtn">
+                                                            <a href="{% url 'notification' %}">View All</a>
                                                         </div>
-                                                    </li>
-                                                </ul>
-                                                <div class="drp_more_items">
-                                                    <div class="drp_vew_mritemsbtn">
-                                                        <a href="#">View All</a>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            {% else %}
+                                                <p>You need to be logged in to view your Favourites.</p>
+                                                <a href="{% url 'login' %}">Login</a>
+                                            {% endif %}
                                         </div>
                                         <!-- drop downs -->
                                     </div>

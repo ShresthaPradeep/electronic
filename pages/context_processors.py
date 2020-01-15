@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from products.models import Category, Brand, Type, Feature, Product
 from pages.models import Contact
-from accounts.models import CartProduct
+from accounts.models import CartProduct, UserProfile, Favourite, WaitList, Notification
 
 
 def global_context(request):
@@ -18,10 +18,20 @@ def global_context(request):
         "contacts": contacts,
     }
 
-@login_required
-def after_login_context(request):
 
-    cart_products = CartProduct.objects.filter(user = request.user)
-    return {
-        "cart_products": cart_products,
-    }
+def after_login_context(request):
+    if request.user.is_authenticated:
+        cart_products = CartProduct.objects.filter(user = request.user)
+        profiles = UserProfile.objects.filter(user = request.user)
+        favourites = Favourite.objects.filter(user = request.user)
+        wish_products = WaitList.objects.filter(user = request.user)
+        notifications = Notification.objects.filter(user = request.user)
+        return {
+            "favourites": favourites,
+            "cart_products": cart_products,
+            "wish_products": wish_products,
+            "profiles": profiles,
+            "notifications": notifications,
+        }
+    else:
+        return ()
