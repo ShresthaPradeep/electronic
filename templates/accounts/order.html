@@ -87,11 +87,13 @@
                                     </thead>
                                     <tbody>
                                         {% for order_product in order_products %}
-                                            <tr>
-                                                <td>{{ order_product.product.name}}
-                                                    <br>{{ order_product.product.category.name }}</td>
-                                                <td>Rs.{{ order_product.total_price}}</td>
-                                            </tr>
+                                            {% if not order_product.checked_out %}
+                                                <tr>
+                                                    <td>{{ order_product.product.name}}
+                                                        <br>{{ order_product.product.category.name }}</td>
+                                                    <td>Rs.{{ order_product.total_price}}</td>
+                                                </tr>
+                                            {% endif %}
                                         {% endfor %}
                                     </tbody>
                                 </table>

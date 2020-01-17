@@ -5,13 +5,14 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.views import generic
 from django.urls import reverse_lazy
 from products.models import Product
 from .models import Favourite, Cart, CartProduct, WaitList, UserProfile, Notification, Order
 from .forms import RegistrationForm, LoginForm, UserUpdateForm, ProfileUpdateForm
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -96,6 +97,7 @@ class ProfileView(generic.View):
 def edit_profile(request):
 
     if request.method == 'POST':
+        username = request.POST['username']
         email = request.POST['email']
         address = request.POST['address']
         phone = request.POST['phone']
@@ -107,10 +109,16 @@ def edit_profile(request):
     
 
         user_profile_qs = UserProfile.objects.filter(user = request.user)
+        user = User.objects.get(username = request.user.username)
+        if user:
+            user.username = username
+            user.email = email
+            user.save()
         
         if user_profile_qs.exists():
             user_profile = user_profile_qs[0]
-            user_profile.email = email
+            user_profile.username = user.username
+            user_profile.email = user.email
             if photo:
                 user_profile.photo = photo
             user_profile.address = address
@@ -146,8 +154,9 @@ def add_to_cart(request, pk):
             checked_out = False,
             )
         
-        cart = get_object_or_404(Cart, user = request.user)
-        if cart:
+        carts = Cart.objects.filter(user = request.user)
+        if carts.exists():
+            cart = carts[0]
             cart.product.add(cart_product)
             cart.save()
         else:
@@ -159,12 +168,13 @@ def add_to_cart(request, pk):
     else:
         messages.info(request, ("Product is out of stock"))
         return redirect('product_detail', pk)
-
-def remove_from_cart(request, pk):
-    product = get_object_or_404(CartProduct, id=pk)
-    product.delete()
         
-    return redirect('cart')
+
+def remove_from_cart(request):
+    if request.method=="GET":
+        CartProduct.objects.filter(id=request.GET.get("id"), user=request.user).delete()
+        print("Deleted")
+        return JsonResponse({})
 
 
 class CartView(LoginRequiredMixin, generic.View):
@@ -172,7 +182,8 @@ class CartView(LoginRequiredMixin, generic.View):
         cart = CartProduct.objects.filter(user = self.request.user)
         total = 0
         for product in cart:
-            total = product.quantity * product.product.selling_price + total
+            if not product.checked_out:
+                total = product.quantity * product.product.selling_price + total
             
 
         context = {
@@ -210,7 +221,7 @@ def add_to_wait(request, pk):
         product=product,
         user = request.user,
         )
-    return redirect('product_detail', pk)
+    return redirect('wait')
 
 
 def add_to_cart_from_wait(request, pk):
@@ -234,8 +245,9 @@ def add_to_cart_from_wait(request, pk):
             checked_out = False,
             )
 
-        cart = get_object_or_404(Cart, user = request.user)
-        if cart:
+        carts = Cart.objects.filter(user = request.user)
+        if carts.exists():
+            cart = carts[0]
             cart.product.add(cart_product)
             cart.save()
         else:
@@ -243,18 +255,20 @@ def add_to_cart_from_wait(request, pk):
             cart.product.add(cart_product)
             cart.save()
     
-        return redirect('wait')
+        return redirect('cart')
 
     else:
         messages.info(request, ("Product is out of stock"))
         return redirect('wait')
 
 
-def remove_from_wait(request, pk):
-    product = get_object_or_404(WaitList, id=pk)
-    product.delete()
-        
-    return redirect('wait')
+def remove_from_wait(request):
+    if request.method=="GET":
+        print("Bye")
+        print(request.GET)
+        WaitList.objects.filter(id=request.GET.get("id"), user=request.user).delete()
+        print("Deleted")
+        return JsonResponse({})
 
        
 class FavouriteView(generic.View):
@@ -266,13 +280,39 @@ class FavouriteView(generic.View):
         return render(self.request, 'accounts/favourites.html', context)
 
 
-def add_to_favourite(request, pk):
-    product = get_object_or_404(Product, id = pk)
-    favourite_product, created = Favourite.objects.get_or_create(
-        product=product,
-        user = request.user,
-        )
-    return redirect('index')
+def add_to_favourite(request):
+    
+    if request.method=="GET":
+        print("Hello")
+        print(request.GET)
+        fav = Favourite.objects.filter(product__id=request.GET.get("id"), user=request.user)
+        if fav.exists():
+            fav.delete()
+            return JsonResponse({'key': "deleted"})
+        else:
+            product = get_object_or_404(Product, id = int(request.GET.get('id')))
+
+            favourite_product, created = Favourite.objects.get_or_create(
+                product=product,
+                user = request.user,
+                )
+            return JsonResponse({'key': "created"})
+    # return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def remove_from_favourite(request):
+    if request.method=="GET":
+        print("Bye")
+        print(request.GET)
+        Favourite.objects.filter(id=request.GET.get("id"), user=request.user).delete()
+        print("Deleted")
+        return JsonResponse({})
+
+
+# def remove_from_favourite(request, pk):
+#     product = get_object_or_404(Favourite, id=pk)
+#     product.delete()
+        
+#     return redirect('favourite')
 
 
 def add_to_cart_from_favourite(request, pk):
@@ -296,8 +336,9 @@ def add_to_cart_from_favourite(request, pk):
             checked_out = False,
             )
 
-        cart = get_object_or_404(Cart, user = request.user)
-        if cart:
+        carts = Cart.objects.filter(user = request.user)
+        if carts.exists():
+            cart = carts[0]
             cart.product.add(cart_product)
             cart.save()
         else:
@@ -309,13 +350,6 @@ def add_to_cart_from_favourite(request, pk):
     else:
         messages.info(request, (" Product is not available!! "))
         return redirect('favourite')
-
-    
-def remove_from_favourite(request, pk):
-    product = get_object_or_404(Favourite, id=pk)
-    product.delete()
-        
-    return redirect('favourite')
 
 
 class NotificationView(generic.View):
@@ -334,7 +368,8 @@ class OrderView(generic.View):
 
         total = 0
         for product in order_products:
-            total = product.quantity * product.product.selling_price + total
+            if not product.checked_out:
+                total = product.quantity * product.product.selling_price + total
 
         context = {
             'order_products': order_products,

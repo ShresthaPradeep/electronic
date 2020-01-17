@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load static %}
+{% load favourite_tag %}
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -9,87 +10,119 @@
     <meta name="keywords" content="">
 	<title>Document</title>
 </head>
-<body>
-    {% block content %}
-    <div class="contentspacer"></div> 
-    <section class="product_listing">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">                    
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="prd_list_heading">
-                                <h1>Product Listings</h1>
-                                {% if page_obj.paginator.num_pages != 1 %}
-                                    <span>Showing {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} results</span>
-                                {% endif %}
-                            </div>
+{% block content %}
+<div class="contentspacer"></div> 
+<section class="product_listing">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">                    
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="prd_list_heading">
+                            <h1>Product Listings</h1>
+                            {% if page_obj.paginator.num_pages != 1 %}
+                                <span>Showing {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} results</span>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        {% for product in products %}
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
-                                    <div class="list_prd_itm text-center">
-                                        <div class="prd_img">
-                                            <a href="{% url 'product_detail' product.id %}"><img src="{{ product.photo_main.url }}" alt=""></a>
-                                        </div>
-                                        <div class="prd_infos">
-                                            <h3> <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
-                                            <div class="prd_infos_prcs">
-                                                <span class="price_old">Rs.{{ product.marked_price }}</span><span class="price_new">Rs.{{ product.selling_price }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="prd_actions">
-                                            <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
-                                            <!-- <button class="addtocart">Add To Cart</button> -->
-                                            <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                </div>
+                <div class="row no-gutters">
+                    {% for product in products %}
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                                <div class="list_prd_itm text-center">
+                                    <div class="prd_img">
+                                        <a href="{% url 'product_detail' product.id %}"><img src="{{ product.photo_main.url }}" alt=""></a>
+                                    </div>
+                                    <div class="prd_infos">
+                                        <h3> <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+                                        <div class="prd_infos_prcs">
+                                            <span class="price_old">Rs.{{ product.marked_price }}</span><span class="price_new">Rs.{{ product.selling_price }}</span>
                                         </div>
                                     </div>
-                                </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="row">
-                        <div class="prd_pagination">
-                            <div class="blog-pagination">
-                                {% if page_obj.paginator.num_pages != 1 %}
-                                    <span>Showing {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} results</span>
-                                {% endif %}
-                                <ul class="flat-pagination style1">
-                                    <li class="prev">
-                                        {% if page_obj.has_previous %}
-                                            <a href="?page={{ page_obj.previous_page_number }}">Prev Page</a>
+                                    <div class="prd_actions">
+                                        <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
+                                        <!-- <button class="addtocart">Add To Cart</button> -->
+                                        {% if product|favourites:request.user.id %}
+                                            <a style="background: #ff8202; color: #fff;" href="{% url 'add_to_favourite' %}" data-id = "{{ product.id }}" class="addwhislist a"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                        {% else %}
+                                            <a href="{% url 'add_to_favourite' %}" class="addwhislist a" data-id = "{{ product.id }}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
                                         {% endif %}
-                                    </li>
-                                    {% if page_obj.paginator.num_pages != 1 %}
-                                        {% for i in page_obj.paginator.page_range %}
-                                            {% if page_obj.number == i %}
-                                                <li class="active">
-                                                    <a>{{ i }}</a>
-                                                </li>
-                                            {% else %}
-                                                <li>
-                                                    <a href="?page={{i}}" class="waves-effect" title="">{{ i }}</a>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                    <li class="next">
-                                        {% if page_obj.has_next %}
-                                            <a href="?page={{ page_obj.next_page_number }}">Next Page</a>
-                                        {% endif %}
-                                    </li>
-                                </ul>
-                                <!-- /.flat-pagination style1 -->
+                                    </div>
                                 </div>
                             </div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                    <div class="prd_pagination">
+                        <div class="blog-pagination">
+                            {% if page_obj.paginator.num_pages != 1 %}
+                                <span>Showing {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} results</span>
+                            {% endif %}
+                            <ul class="flat-pagination style1">
+                                <li class="prev">
+                                    {% if page_obj.has_previous %}
+                                        <a href="?page={{ page_obj.previous_page_number }}">Prev Page</a>
+                                    {% endif %}
+                                </li>
+                                {% if page_obj.paginator.num_pages != 1 %}
+                                    {% for i in page_obj.paginator.page_range %}
+                                        {% if page_obj.number == i %}
+                                            <li class="active">
+                                                <a>{{ i }}</a>
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <a href="?page={{i}}" class="waves-effect" title="">{{ i }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                <li class="next">
+                                    {% if page_obj.has_next %}
+                                        <a href="?page={{ page_obj.next_page_number }}">Next Page</a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            <!-- /.flat-pagination style1 -->
                             </div>
                         </div>
-                </div>
+                        </div>
+                    </div>
             </div>
         </div>
-    </section>
-    {% endblock %}
-</body>
-</html>
+    </div>
+</section>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $('.a').on('click', function(event){
+            event.preventDefault();
+            var element = $(this);
+            var id = $(this).attr('data-id');
+            console.log(id);
+            
+            $.ajax({
+                type: "GET",
+                url: '{% url "add_to_favourite" %}',
+                data: {'id': id},
+                dataType: 'json',
+                success: function(response){
+                    console.log("Success!!");
+                    console.log(response);
+                    console.log(response.key);
+                    if (response.key === "created"){
+                    element.css({'background': '#ff8202', 'color': '#fff'});
+                    }
+                    else if (response.key === "deleted"){
+                        element.css({'background': '#e6e5e5', 'color': 'black'});
+                    }
+                },
+                error: function(rs, e){
+                    console.log(rs.response);
+                },
+            });
+        });
+    </script>
+{% endblock %}

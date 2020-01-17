@@ -2,6 +2,7 @@
 <!doctype html>
 {% extends 'base.html' %}
 {% load static %}
+{% load favourite_tag %}
 <html lang="en">
 <head>
     <!-- Meta Tags -->
@@ -10,182 +11,217 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">    
 </head>
 
-<body>
-    {% block content %}
-   
-        <div class="contentspacer"></div>
-        {% include 'partials/_banner.html' %}
-             
-    {% if messages %}
-        {% for stuff in messages %}
-            <div class="alert alert-warning alert-dismissable" role="alert">
-                <button class="close" data-dismiss ="alert">
-                    <small><sup>x</sup></small>
-                </button>
-                {{ stuff }}
-            </div>
+{% block content %}
+
+    <div class="contentspacer"></div>
+    {% include 'partials/_banner.html' %}
             
-        {% endfor %}
-        <br/>
-    {% endif %}
-        <section class="offers_ads">
+{% if messages %}
+    {% for stuff in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss ="alert">
+                <small><sup>x</sup></small>
+            </button>
+            {{ stuff }}
+        </div>
+        
+    {% endfor %}
+    <br/>
+{% endif %}
+    <!-- <section class="offers_ads">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ban_ads_sml">
+                        <div class="sml_ad_img">
+                            <img src="images/cameras.jpg" alt="">
+                        </div>
+                        <div class="sml_ad_txt_hldr">
+                            <div class="sml_ad_txt">
+                                <span class="sml_adt_ttl">Big Deals On the Camears</span>
+                                <a href="#">Shop Now <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="ban_ads_sml">
+                        <div class="sml_ad_img">
+                            <img src="images/DesktopPC.jpg" alt="">
+                        </div>
+                        <div class="sml_ad_txt_hldr">
+                            <div class="sml_ad_txt">
+                                <span class="sml_adt_ttl">Big Deals On the Camears</span>
+                                <a href="#">Shop Now <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="ban_ads_sml">
+                        <div class="sml_ad_img">
+                            <img src="images/MobileDevicesv2-2.jpg" alt="">
+                        </div>
+                        <div class="sml_ad_txt_hldr">
+                            <div class="sml_ad_txt">
+                                <span class="sml_adt_ttl">Big Deals On the Camears</span>
+                                <a href="#">Shop Now <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    
+    {% if most_viewed %}
+        <section class="caro_products">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div class="ban_ads_sml">
-                            <div class="sml_ad_img">
-                                <img src="images/cameras.jpg" alt="">
-                            </div>
-                            <div class="sml_ad_txt_hldr">
-                                <div class="sml_ad_txt">
-                                    <span class="sml_adt_ttl">Big Deals On the Camears</span>
-                                    <a href="#">Shop Now <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                    <div class="col-md-12">
+                        <div class="featured_caro_holder brdr_bx">
+                            <div class="section_heading">
+                                <div class="sectionheading_cont">
+                                    <div class="sectionttl">
+                                        <h2>Most Viewed</h2>
+                                    </div>
+                                    <div class="vi_all_prd_caro">
+                                        <a href="{% url 'most_viewed' %}">View All</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="ban_ads_sml">
-                            <div class="sml_ad_img">
-                                <img src="images/DesktopPC.jpg" alt="">
-                            </div>
-                            <div class="sml_ad_txt_hldr">
-                                <div class="sml_ad_txt">
-                                    <span class="sml_adt_ttl">Big Deals On the Camears</span>
-                                    <a href="#">Shop Now <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="ban_ads_sml">
-                            <div class="sml_ad_img">
-                                <img src="images/MobileDevicesv2-2.jpg" alt="">
-                            </div>
-                            <div class="sml_ad_txt_hldr">
-                                <div class="sml_ad_txt">
-                                    <span class="sml_adt_ttl">Big Deals On the Camears</span>
-                                    <a href="#">Shop Now <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
+                            <div class="featured_caro itms_caro owl-carousel owl-theme">
+                                {% for product in most_viewed %}
+                                    <div class="item">
+                                        <div class="list_prd_itm text-center">
+                                            <div class="prd_img">
+                                                <a href="{% url 'product_detail' product.id %}"><img src="{{ product.photo_main.url }}" alt=""></a>
+                                            </div>
+                                            <div class="prd_infos">
+                                                <h3> <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+                                                <span class="price">Rs.{{ product.selling_price }}</span>
+                                            </div>
+                                            <div class="prd_actions">
+                                                <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
+                                                <!-- <button class="addtocart">Add To Cart</button> -->
+                                                <!-- <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button> -->
+                                                
+                                                {% if product|favourites:request.user.id %}
+                                                    <a style="background: #ff8202; color: #fff;" href="{% url 'add_to_favourite' %}" data-id = "{{ product.id }}" class="addwhislist a"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                {% else %}
+                                                    <a href="{% url 'add_to_favourite' %}" class="addwhislist a" data-id = "{{ product.id }}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        
-        {% if most_viewed %}
-            <section class="caro_products">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="featured_caro_holder brdr_bx">
-                                <div class="section_heading">
-                                    <div class="sectionheading_cont">
-                                        <div class="sectionttl">
-                                            <h2>Most Viewed</h2>
-                                        </div>
-                                        <div class="vi_all_prd_caro">
-                                            <a href="{% url 'most_viewed' %}">View All</a>
+    {% endif %}
+
+    {% if products %}
+        {% if features %}
+            {% for feature in features %}
+                <section class="caro_products">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="featured_caro_holder brdr_bx">
+                                    <div class="section_heading">
+                                        <div class="sectionheading_cont">
+                                            <div class="sectionttl">
+                                                <h2>{{ feature.name }}</h2>
+                                            </div>
+                                            <div class="vi_all_prd_caro">
+                                                <a href="{% url 'feature_list' feature.id %}">View All</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="featured_caro itms_caro owl-carousel owl-theme">
-                                    {% for product in most_viewed %}
-                                        <div class="item">
-                                            <div class="list_prd_itm text-center">
-                                                <div class="prd_img">
-                                                    <a href="{% url 'product_detail' product.id %}"><img src="{{ product.photo_main.url }}" alt=""></a>
+                                    <div class="thumimg_caro_itms">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="thumimg_for_caro">
+                                                    <img src="{{ feature.photo.url }}" alt="">
                                                 </div>
-                                                <div class="prd_infos">
-                                                    <h3> <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
-                                                    <span class="price">Rs.{{ product.selling_price }}</span>
-                                                </div>
-                                                <div class="prd_actions">
-                                                    <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
-                                                    <!-- <button class="addtocart">Add To Cart</button> -->
-                                                    <!-- <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button> -->
-                                                    <a href="{% url 'add_to_favourite' product.id %}" class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <div class="thumimg_caro itms_caro owl-carousel owl-theme">
+                                                    {% for product in feature.feature_products.all %}
+                                                        <div class="item">
+                                                            <div class="list_prd_itm text-center">
+                                                                <div class="prd_img">
+                                                                    <a href="{% url 'product_detail' product.id %}"><img src="{{ product.photo_main.url }}" alt=""></a>
+                                                                </div>
+                                                                <div class="prd_infos">
+                                                                    <h3> <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+                                                                    <span class="price">Rs.{{ product.selling_price }}</span>
+                                                                </div>
+                                                                <div class="prd_actions">
+                                                                    <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
+                                                                    <!-- <button class="addtocart">Add To Cart</button> -->
+                                                                    <!-- <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button> -->
+                                                                    
+                                                                    {% if product|favourites:request.user.id %}
+                                                                        <a style="background: #ff8202; color: #fff;" href="{% url 'add_to_favourite' %}" data-id = "{{ product.id }}" class="addwhislist a"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                                    {% else %}
+                                                                        <a href="{% url 'add_to_favourite' %}" class="addwhislist a" data-id = "{{ product.id }}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                                    {% endif %}
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                         </div>
-                                    {% endfor %}
+                                    </div>
+                                    <!-- thumimg and caro -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                    </div>
+                </section>
+            {% endfor %}
         {% endif %}
+    {% endif %}
+    {% include 'partials/_brands.html' %}
 
-        {% if products %}
-            {% if features %}
-                {% for feature in features %}
-                    <section class="caro_products">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="featured_caro_holder brdr_bx">
-                                        <div class="section_heading">
-                                            <div class="sectionheading_cont">
-                                                <div class="sectionttl">
-                                                    <h2>{{ feature.name }}</h2>
-                                                </div>
-                                                <div class="vi_all_prd_caro">
-                                                    <a href="{% url 'feature_list' feature.id %}">View All</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="thumimg_caro_itms">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="thumimg_for_caro">
-                                                        <img src="{{ feature.photo.url }}" alt="">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-8">
-                                                    <div class="thumimg_caro itms_caro owl-carousel owl-theme">
-                                                        {% for product in feature.feature_products.all %}
-                                                            <div class="item">
-                                                                <div class="list_prd_itm text-center">
-                                                                    <div class="prd_img">
-                                                                        <a href="{% url 'product_detail' product.id %}"><img src="{{ product.photo_main.url }}" alt=""></a>
-                                                                    </div>
-                                                                    <div class="prd_infos">
-                                                                        <h3> <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
-                                                                        <span class="price">Rs.{{ product.selling_price }}</span>
-                                                                    </div>
-                                                                    <div class="prd_actions">
-                                                                        <a href="{% url 'product_detail' product.id %}" class="addtocart">Add To Cart</a>
-                                                                        <!-- <button class="addtocart">Add To Cart</button> -->
-                                                                        <!-- <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button> -->
-                                                                        
-                                                                        <a href="{% url 'add_to_favourite' product.id %}" class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- thumimg and caro -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    </section>
-                {% endfor %}
-            {% endif %}
-        {% endif %}
-        {% include 'partials/_brands.html' %}
-        
-    {% endblock %}
-<script src="js/jquery.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/main.js"></script>
-</body>
-</html>
+    
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $('.a').on('click', function(event){
+            event.preventDefault();
+            var element = $(this);
+            var id = $(this).attr('data-id');
+            console.log(id);
+            
+            $.ajax({
+                type: "GET",
+                url: '{% url "add_to_favourite" %}',
+                data: {'id': id},
+                dataType: 'json',
+                success: function(response){
+                    console.log("Success!!");
+                    console.log(response);
+                    console.log(response.key);
+                    if (response.key === "created"){
+                    element.css({'background': '#ff8202', 'color': '#fff'});
+                    }
+                    else if (response.key === "deleted"){
+                        element.css({'background': '#e6e5e5', 'color': 'black'});
+                    }
+                },
+                error: function(rs, e){
+                    console.log(rs.response);
+                },
+            });
+        });
+    </script>
+{% endblock %}

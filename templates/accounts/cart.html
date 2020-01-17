@@ -58,7 +58,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <a href="{% url 'remove_from_cart' cart_product.id %}"><button class="crt_dlt"><i class="fa fa-trash-o" aria-hidden="true"></i></button></a>
+                                                    <a href="{% url 'remove_from_cart' %}" class="rc" data-id ="{{ cart_product.id }}"><i class="fa fa-trash-o c_del" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr><!-- tr -->
                                         {% endif %}
@@ -110,6 +110,33 @@
                 </div>
             </div>
         </section>
+    {% endblock %}
+
+    {% block scripts %}
+        <script type="text/javascript">
+            $('.rc').on('click', function(event){
+                event.preventDefault();
+                var element = $(this);
+                var id = $(this).attr('data-id');
+                
+                var thisTableRow = $(this).closest('tr');
+                console.log(id);
+                
+                $.ajax({
+                    type: "GET",
+                    url: '{% url "remove_from_cart" %}',
+                    data: {'id': id},
+                    dataType: 'json',
+                    success: function(response){
+                        $(thisTableRow).hide("slow");
+                        console.log("Success!!");
+                    },
+                    error: function(rs, e){
+                        console.log(rs.response);
+                    },
+                });
+            });
+        </script>
     {% endblock %}
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="keywords" content="">
+	<title>Document</title>
+</head>
+<body>
+    {% block content %}
+        <div class="contentspacer"></div> 
+        <section class="cartpg">
+            <div class="container">
+                <div class="row">
+                    
+                    <div class="col-md-8 mx-auto">
+                        <div class="box-checkout">
+                            <div class="checkout-login">
+                                Reset link has been sent to your email...
+                            </div>
+                            <a style="float: right;" href="{% url 'login' %}">Login Now</a>
+                            <!-- /.checkout -->
+                        </div>
+                        <!-- /.box-checkout -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
+</body>
+</html>

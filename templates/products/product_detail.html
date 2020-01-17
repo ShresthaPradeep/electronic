@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load static %}
+{% load favourite_tag %}
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -95,7 +96,7 @@
                                                     <strong>SKU</strong>:{{ product_detail.sku }}
                                                 </span>
                                             </div>
-                                            <form action="{% url 'add_to_cart' product_detail.id %}">
+                                            <form action="{% url 'add_to_cart' product_detail.id %}" method="GET">
                                                 <div class="pdetails_clr_qty">
                                                     {% if product_detail.product_color %}
                                                         <div class="colors">
@@ -306,8 +307,12 @@
                                                         <span class="price">Rs.{{ prod.marked_price }}</span>
                                                     </div>
                                                     <div class="prd_actions">
-                                                        <button class="addtocart">Add To Cart</button>
-                                                        <button class="addwhislist"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                                                        <a href="{% url 'product_detail' prod.id %}" class="addtocart">Add To Cart</a>
+                                                        {% if product|favourites:request.user.id %}
+                                                            <a style="background: #ff8202; color: #fff;" href="{% url 'add_to_favourite' %}" data-id = "{{ prod.id }}" class="addwhislist a"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                        {% else %}
+                                                            <a href="{% url 'add_to_favourite' %}" class="addwhislist a" data-id = "{{ prod.id }}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -323,6 +328,38 @@
 
         {% include 'partials/_brands.html' %}
 
+    {% endblock %}
+
+    {% block scripts %}
+        <script type="text/javascript">
+            $('.a').on('click', function(event){
+                event.preventDefault();
+                var element = $(this);
+                var id = $(this).attr('data-id');
+                console.log(id);
+                
+                $.ajax({
+                    type: "GET",
+                    url: '{% url "add_to_favourite" %}',
+                    data: {'id': id},
+                    dataType: 'json',
+                    success: function(response){
+                        console.log("Success!!");
+                        console.log(response);
+                        console.log(response.key);
+                        if (response.key === "created"){
+                        element.css({'background': '#ff8202', 'color': '#fff'});
+                        }
+                        else if (response.key === "deleted"){
+                            element.css({'background': '#e6e5e5', 'color': 'black'});
+                        }
+                    },
+                    error: function(rs, e){
+                        console.log(rs.response);
+                    },
+                });
+            });
+        </script>
     {% endblock %}
 </body>
 </html>

@@ -1783,7 +1783,18 @@ section.cartpg {
     font-size: 20px;
     font-weight: 300;
 }
+.c_del{
+    width: 100%;
+    text-align: center;
+    border: none;
+    background: none;
+    font-size: 16px;
+    color: #989898;
+}
 
+.c_del:hover{
+    color: red;
+}
 button.crt_dlt{
     width: 100%;
     text-align: center;

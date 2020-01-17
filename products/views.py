@@ -4,6 +4,7 @@ from django.views import generic
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from .models import Product, Brand, Feature, Category
+from accounts.models import Favourite
 
 # Create your views here.
 
@@ -55,7 +56,7 @@ class CategoryListView(generic.ListView):
     def get_queryset(self):
         queryset = Product.objects.filter(category_id = self.kwargs.get('pk'))
         return queryset
-
+        
 
 class RelatedListView(generic.ListView):
     context_object_name = 'products'
