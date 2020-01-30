@@ -92,7 +92,7 @@
                                     <form action="{% url 'search' %}">
                                         {% csrf_token %}
                                         <div class="input-groups ">
-                                            <input type="text" class="form-control" name="keywords" placeholder="Search here">
+                                            <input class="search_in" type="text" class="form-control" name="keywords" placeholder="Search here">
                                             <div class="input-group-append">
                                                 <button type="submit" class="submit "><i class="fa fa-search "></i></button>
                                             </div>
@@ -114,7 +114,9 @@
                                             <div class="clk_for_dropdwn fabclick" id="fabclick"></div>
                                             <span class="shop_itm_txt">
                                                 <a href="#">
-                                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                                <i class="fa fa-heart" aria-hidden="true">
+                                                    <sub style="color: red; font-weight: bold;" id="sb_f">{{ request.user.users.fav }}</sub>
+                                                </i>
                                                 <!-- <span class="shp_itm_indic">2</span> -->
                                                 </a>
                                             </span>
@@ -123,7 +125,9 @@
                                             <div class="clk_for_dropdwn cartclick" id="cartclick"></div>
                                             <span class="shop_itm_txt">
                                                 <a href="#">
-                                                <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                                                <i class="fa fa-cart-arrow-down" aria-hidden="true">
+                                                    <sub style="color: red; font-weight: bold;" id="sb_c">{{ request.user.users.cart }}</sub>
+                                                </i>
                                                 <!-- <span class="shp_itm_indic">2</span> -->
                                                 </a>
                                             </span>
@@ -132,7 +136,9 @@
                                             <div class="clk_for_dropdwn waitclick" id="waitclick"></div>
                                             <span class="shop_itm_txt">
                                                 <a href="#">
-                                                <i class="fa fa-hourglass-end" aria-hidden="true"></i>
+                                                <i class="fa fa-hourglass-end" aria-hidden="true">
+                                                    <sub style="color: red; font-weight: bold;" id="sb_w">{{ request.user.users.wait }}</sub>
+                                                </i>
                                                 <!-- <span class="shp_itm_indic">2</span>  -->
                                                 </a>
                                             </span>
@@ -141,7 +147,9 @@
                                             <div class="clk_for_dropdwn hd_notofi" id="notifclick"></div>
                                             <span class="shop_itm_txt">
                                                 <a href="#">
-                                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                                <i class="fa fa-bell" aria-hidden="true">
+                                                    <sub style="color: red; font-weight: bold;">{{ notific }}</sub>
+                                                </i>
                                                 <!-- <span class="shp_itm_indic">2</span> -->
                                                 </a>
                                             </span>

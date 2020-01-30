@@ -26,12 +26,14 @@ def after_login_context(request):
         favourites = Favourite.objects.filter(user = request.user)
         wish_products = WaitList.objects.filter(user = request.user)
         notifications = Notification.objects.filter(user = request.user)
+        notific_count = len(notifications)
         return {
             "favourites": favourites,
             "cart_products": cart_products,
             "wish_products": wish_products,
             "profiles": profiles,
             "notifications": notifications,
+            "notific": notific_count,
         }
     else:
         return ()

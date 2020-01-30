@@ -123,6 +123,9 @@
                     success: function(response){
                         $(thisTableRow).hide("slow");
                         console.log("Success!!");
+                        var sub = $('#sb_w');
+                        sub.empty();
+                        sub.append(response.wait);
                     },
                     error: function(rs, e){
                         console.log(rs.response);

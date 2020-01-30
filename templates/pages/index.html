@@ -211,12 +211,16 @@
                     console.log("Success!!");
                     console.log(response);
                     console.log(response.key);
+                    var sub = $('#sb_f');
+                    sub.empty();
                     if (response.key === "created"){
                     element.css({'background': '#ff8202', 'color': '#fff'});
                     }
                     else if (response.key === "deleted"){
                         element.css({'background': '#e6e5e5', 'color': 'black'});
                     }
+                    console.log(response.fav);
+                    sub.append(response.fav);
                 },
                 error: function(rs, e){
                     console.log(rs.response);

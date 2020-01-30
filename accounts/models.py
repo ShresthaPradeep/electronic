@@ -14,6 +14,9 @@ class UserProfile(models.Model):
     ship_address2 = models.CharField(max_length=200, blank = True, null = True)
     ship_phone = models.CharField(max_length=10, blank = True, null = True)
     ship_email = models.EmailField(blank = True, null = True)
+    fav = models.IntegerField(default=0)
+    cart = models.IntegerField(default=0)
+    wait = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username

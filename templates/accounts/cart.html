@@ -130,6 +130,9 @@
                     success: function(response){
                         $(thisTableRow).hide("slow");
                         console.log("Success!!");
+                        var sub = $('#sb_c');
+                        sub.empty();
+                        sub.append(response.cart);
                     },
                     error: function(rs, e){
                         console.log(rs.response);

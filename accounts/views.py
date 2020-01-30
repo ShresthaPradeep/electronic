@@ -134,6 +134,8 @@ def edit_profile(request):
 
 @login_required
 def add_to_cart(request, pk):
+    profile = UserProfile.objects.get(user = request.user)
+    cart_count = CartProduct.objects.filter(user = request.user)
     product = get_object_or_404(Product, id = pk)
 
     if 'number' in request.GET:
@@ -159,10 +161,14 @@ def add_to_cart(request, pk):
             cart = carts[0]
             cart.product.add(cart_product)
             cart.save()
+            profile.cart = len(cart_count)
+            profile.save()
         else:
             cart = Cart.objects.create(user=request.user)
             cart.product.add(cart_product)
             cart.save()
+            profile.cart = len(cart)
+            profile.save()
 
         return redirect('cart')
     else:
@@ -171,10 +177,15 @@ def add_to_cart(request, pk):
         
 
 def remove_from_cart(request):
+    profile = UserProfile.objects.get(user = request.user)
+    cart = CartProduct.objects.filter(user = request.user)
     if request.method=="GET":
         CartProduct.objects.filter(id=request.GET.get("id"), user=request.user).delete()
         print("Deleted")
-        return JsonResponse({})
+        profile.cart = len(cart)
+        profile.save()
+        cart_count = profile.cart
+        return JsonResponse({'cart': cart_count})
 
 
 class CartView(LoginRequiredMixin, generic.View):
@@ -216,15 +227,22 @@ class WaitView(LoginRequiredMixin, generic.View):
 
 
 def add_to_wait(request, pk):
+    profile = UserProfile.objects.get(user = request.user)
+    wait = WaitList.objects.filter(user = request.user)
     product = get_object_or_404(Product, id = pk)
     wait_product, created = WaitList.objects.get_or_create(
         product=product,
         user = request.user,
         )
+    
+    profile.wait = len(wait)
+    profile.save()
     return redirect('wait')
 
 
 def add_to_cart_from_wait(request, pk):
+    profile = UserProfile.objects.get(user = request.user)
+    cart_count = CartProduct.objects.filter(user = request.user)
     product = get_object_or_404(Product, id = pk)
 
     if 'number' in request.GET:
@@ -254,7 +272,9 @@ def add_to_cart_from_wait(request, pk):
             cart = Cart.objects.create(user=request.user)
             cart.product.add(cart_product)
             cart.save()
-    
+        
+        profile.cart = len(cart_count)
+        profile.save()
         return redirect('cart')
 
     else:
@@ -263,12 +283,17 @@ def add_to_cart_from_wait(request, pk):
 
 
 def remove_from_wait(request):
+    profile = UserProfile.objects.get(user = request.user)
+    wait = WaitList.objects.filter(user = request.user)
     if request.method=="GET":
         print("Bye")
         print(request.GET)
         WaitList.objects.filter(id=request.GET.get("id"), user=request.user).delete()
         print("Deleted")
-        return JsonResponse({})
+        profile.wait = len(wait)
+        profile.save()
+        wait_count = profile.wait
+        return JsonResponse({'wait': wait_count})
 
        
 class FavouriteView(generic.View):
@@ -282,13 +307,17 @@ class FavouriteView(generic.View):
 
 def add_to_favourite(request):
     
+    print("Hello")
+    profile = UserProfile.objects.get(user = request.user)
+    favourite = Favourite.objects.filter(user = request.user)
     if request.method=="GET":
-        print("Hello")
-        print(request.GET)
         fav = Favourite.objects.filter(product__id=request.GET.get("id"), user=request.user)
         if fav.exists():
             fav.delete()
-            return JsonResponse({'key': "deleted"})
+            profile.fav = len(favourite)
+            profile.save()
+            fav = profile.fav
+            return JsonResponse({'key': "deleted", 'fav': fav})
         else:
             product = get_object_or_404(Product, id = int(request.GET.get('id')))
 
@@ -296,16 +325,24 @@ def add_to_favourite(request):
                 product=product,
                 user = request.user,
                 )
-            return JsonResponse({'key': "created"})
+            profile.fav = len(favourite)
+            profile.save()
+            fav = profile.fav
+            return JsonResponse({'key': "created", 'fav': fav})
     # return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def remove_from_favourite(request):
+    profile = UserProfile.objects.get(user = request.user)
+    fav = Favourite.objects.filter(user = request.user)
     if request.method=="GET":
         print("Bye")
         print(request.GET)
         Favourite.objects.filter(id=request.GET.get("id"), user=request.user).delete()
         print("Deleted")
-        return JsonResponse({})
+        profile.fav = len(fav)
+        profile.save()
+        fav_count = profile.fav
+        return JsonResponse({'fav': fav_count})
 
 
 # def remove_from_favourite(request, pk):
@@ -316,6 +353,8 @@ def remove_from_favourite(request):
 
 
 def add_to_cart_from_favourite(request, pk):
+    profile = UserProfile.objects.get(user = request.user)
+    cart_count = CartProduct.objects.filter(user = request.user)
     product = get_object_or_404(Product, id = pk)
 
     if 'number' in request.GET:
@@ -345,7 +384,8 @@ def add_to_cart_from_favourite(request, pk):
             cart = Cart.objects.create(user=request.user)
             cart.product.add(cart_product)
             cart.save()
-            
+        profile.cart = len(cart_count)
+        profile.save()
         return redirect('favourite')
     else:
         messages.info(request, (" Product is not available!! "))
